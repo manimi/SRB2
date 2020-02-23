@@ -584,6 +584,10 @@ void D_RegisterServerCommands(void)
 	CV_RegisterVar(&cv_maxsend);
 	CV_RegisterVar(&cv_noticedownload);
 	CV_RegisterVar(&cv_downloadspeed);
+	CV_RegisterVar(&cv_backnum);
+	CV_RegisterVar(&cv_topnum);
+	CV_RegisterVar(&cv_colorbacknum);
+	CV_RegisterVar(&cv_colortopnum);
 #ifndef NONET
 	CV_RegisterVar(&cv_allownewplayer);
 	CV_RegisterVar(&cv_joinnextround);

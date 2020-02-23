@@ -3058,6 +3058,22 @@ consvar_t cv_noticedownload = {"noticedownload", "Off", CV_SAVE, CV_OnOff, NULL,
 static CV_PossibleValue_t downloadspeed_cons_t[] = {{0, "MIN"}, {32, "MAX"}, {0, NULL}};
 consvar_t cv_downloadspeed = {"downloadspeed", "16", CV_SAVE, downloadspeed_cons_t, NULL, 0, NULL, NULL, 0, 0, NULL};
 
+// Backnum
+static CV_PossibleValue_t backnum_cons_t[] = {{1, "MIN"}, {10, "MAX"}, {0, NULL}};
+consvar_t cv_backnum = {"backnum", "2", CV_SAVE, backnum_cons_t, NULL, 0, NULL, NULL, 0, 0, NULL};
+
+// Topnum
+static CV_PossibleValue_t topnum_cons_t[] = {{1, "MIN"}, {10, "MAX"}, {0, NULL}};
+consvar_t cv_topnum = {"topnum", "1", CV_SAVE, topnum_cons_t, NULL, 0, NULL, NULL, 0, 0, NULL};
+
+// Colorbacknum
+static CV_PossibleValue_t colorbacknum_cons_t[] = {{1, "MIN"}, {63, "MAX"}, {0, NULL}};
+consvar_t cv_colorbacknum = {"colorbacknum", "50", CV_SAVE, colorbacknum_cons_t, NULL, 0, NULL, NULL, 0, 0, NULL};
+
+// Colortopnum
+static CV_PossibleValue_t colortopnum_cons_t[] = {{1, "MIN"}, {63, "MAX"}, {0, NULL}};
+consvar_t cv_colortopnum = {"colortopnum", "8", CV_SAVE, colortopnum_cons_t, NULL, 0, NULL, NULL, 0, 0, NULL};
+
 static void Got_AddPlayer(UINT8 **p, INT32 playernum);
 
 // called one time at init

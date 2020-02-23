@@ -3485,6 +3485,21 @@ boolean G_IsSpecialStage(INT32 mapnum)
 }
 
 //
+// U_IsUnlockableUnlocked
+//
+// Returns true if the unlockable is unlocked (LOL)
+// False otherwise.
+//
+boolean U_IsUnlockableUnlocked(INT32 unlockablenum) //MEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+{
+	//memset(&unlockables[unlockablenum], 0, sizeof(unlockable_t));
+	if (unlockables[unlockablenum-1].unlocked == true)
+		return true;
+
+	return false;
+}
+
+//
 // G_GametypeUsesLives
 //
 // Returns true if the current gametype uses

@@ -2881,6 +2881,16 @@ static int lib_gIsSpecialStage(lua_State *L)
 	return 1;
 }
 
+static int lib_gIsUnlockableUnlocked(lua_State *L) //MEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+{
+	INT32 unlockablenum = luaL_checkinteger(L, 1);
+	//HUDSAFE
+	INLEVEL
+
+	lua_pushboolean(L, U_IsUnlockableUnlocked(unlockablenum));
+	return 1;
+}
+
 static int lib_gGametypeUsesLives(lua_State *L)
 {
 	//HUDSAFE
@@ -3202,6 +3212,7 @@ static luaL_Reg lib[] = {
 	{"G_EnoughPlayersFinished",lib_gEnoughPlayersFinished},
 	{"G_ExitLevel",lib_gExitLevel},
 	{"G_IsSpecialStage",lib_gIsSpecialStage},
+	{"U_IsUnlockableUnlocked",lib_gIsUnlockableUnlocked},
 	{"G_GametypeUsesLives",lib_gGametypeUsesLives},
 	{"G_GametypeUsesCoopLives",lib_gGametypeUsesCoopLives},
 	{"G_GametypeUsesCoopStarposts",lib_gGametypeUsesCoopStarposts},

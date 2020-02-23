@@ -10705,8 +10705,19 @@ static inline int lib_getenum(lua_State *L)
 			}
 		if (mathlib) return luaL_error(L, "player sprite '%s' could not be found.\n", word);
 		return 0;
-	}
-	else if (!mathlib && fastncmp("sfx_",word,4)) {
+	}  else if (fastcmp(word, "backnum")) {
+		lua_pushinteger(L, cv_backnum.value);
+		return 1;
+	}  else if (fastcmp(word, "topnum")) {
+		lua_pushinteger(L, cv_topnum.value);
+		return 1;
+    }  else if (fastcmp(word, "colorbacknum")) {
+		lua_pushinteger(L, cv_colorbacknum.value);
+		return 1;
+    }  else if (fastcmp(word, "colortopnum")) {
+		lua_pushinteger(L, cv_colortopnum.value);
+		return 1;
+    }  else if (!mathlib && fastncmp("sfx_",word,4)) {
 		p = word+4;
 		for (i = 0; i < NUMSFX; i++)
 			if (S_sfx[i].name && fastcmp(p, S_sfx[i].name)) {

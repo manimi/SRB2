@@ -246,6 +246,7 @@ void G_SetGametypeDescription(INT16 gtype, char *descriptiontext, UINT8 leftcolo
 
 INT32 G_GetGametypeByName(const char *gametypestr);
 boolean G_IsSpecialStage(INT32 mapnum);
+boolean U_IsUnlockableUnlocked(INT32 unlockablenum); //MEEEEEEEEEEEEEEEEEEEEE
 boolean G_GametypeUsesLives(void);
 boolean G_GametypeUsesCoopLives(void);
 boolean G_GametypeUsesCoopStarposts(void);

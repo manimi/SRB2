@@ -516,6 +516,8 @@ extern tic_t servermaxping;
 extern consvar_t cv_allownewplayer, cv_joinnextround, cv_maxplayers, cv_rejointimeout;
 extern consvar_t cv_resynchattempts, cv_blamecfail;
 extern consvar_t cv_maxsend, cv_noticedownload, cv_downloadspeed;
+extern consvar_t cv_backnum, cv_colorbacknum;
+extern consvar_t cv_topnum, cv_colortopnum;
 
 // Used in d_net, the only dependence
 tic_t ExpandTics(INT32 low);
