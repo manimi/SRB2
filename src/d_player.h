@@ -517,6 +517,7 @@ typedef struct player_s
 #ifdef HWRENDER
 	fixed_t fovadd; // adjust FOV for hw rendering
 #endif
+	boolean dimenu;
 } player_t;
 
 // Values for dashmode

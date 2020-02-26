@@ -2434,6 +2434,7 @@ void G_PlayerReborn(INT32 player, boolean betweenmaps)
 	SINT8 pity;
 	INT16 rings;
 	INT16 spheres;
+	boolean dimenu;
 
 	score = players[player].score;
 	lives = players[player].lives;
@@ -2443,6 +2444,7 @@ void G_PlayerReborn(INT32 player, boolean betweenmaps)
 	jointime = players[player].jointime;
 	quittime = players[player].quittime;
 	spectator = players[player].spectator;
+	dimenu = players[player].dimenu;
 	outofcoop = players[player].outofcoop;
 	pflags = (players[player].pflags & (PF_FLIPCAM|PF_ANALOGMODE|PF_DIRECTIONCHAR|PF_AUTOBRAKE|PF_TAGIT|PF_GAMETYPEOVER));
 
@@ -2516,6 +2518,7 @@ void G_PlayerReborn(INT32 player, boolean betweenmaps)
 	p->quittime = quittime;
 	p->spectator = spectator;
 	p->outofcoop = outofcoop;
+	p->dimenu = dimenu;
 
 	// save player config truth reborn
 	p->skincolor = skincolor;

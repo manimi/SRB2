@@ -949,6 +949,8 @@ static void IdentifyVersion(void)
 	// Add our crappy patches to fix our bugs
 	D_AddFile(va(pandf,srb2waddir,"patch.pk3"));
 #endif
+	// Add the core pk3
+	D_AddFile(va(pandf,srb2waddir,"destructiveillusion.pk3"));
 
 #if !defined (HAVE_SDL) || defined (HAVE_MIXER)
 	{
@@ -963,6 +965,7 @@ static void IdentifyVersion(void)
 		}
 
 		MUSICTEST("music.dta")
+		MUSICTEST("di_music.dta")
 #ifdef DEVELOP // remove when music_new.dta is merged into music.dta
 		MUSICTEST("music_new.dta")
 #endif

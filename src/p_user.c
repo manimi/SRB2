@@ -6091,7 +6091,7 @@ static void P_3dMovement(player_t *player)
 	}
 
 	// Forward movement
-	if (player->climbing)
+	if (player->climbing && player->dimenu == false)
 	{
 		if (cmd->forwardmove)
 		{
@@ -6128,11 +6128,12 @@ static void P_3dMovement(player_t *player)
 		totalthrust.x += P_ReturnThrustX(player->mo, movepushangle, movepushforward);
 		totalthrust.y += P_ReturnThrustY(player->mo, movepushangle, movepushforward);
 #else
-		P_Thrust(player->mo, movepushangle, movepushforward);
+		if (player->dimenu == false)
+			P_Thrust(player->mo, movepushangle, movepushforward);
 #endif
 	}
 	// Sideways movement
-	if (player->climbing)
+	if (player->climbing && player->dimenu == false)
 	{
 		if (player->mo->eflags & MFE_UNDERWATER)
 			P_InstaThrust(player->mo, player->mo->angle-ANGLE_90, FixedDiv(cmd->sidemove*player->mo->scale, 10*FRACUNIT));
@@ -6176,7 +6177,8 @@ static void P_3dMovement(player_t *player)
 			totalthrust.x += P_ReturnThrustX(player->mo, controldirection, movepushforward);
 			totalthrust.y += P_ReturnThrustY(player->mo, controldirection, movepushforward);
 #else
-			P_Thrust(player->mo, controldirection, movepushforward);
+			if (player->dimenu == false)
+				P_Thrust(player->mo, controldirection, movepushforward);
 #endif
 		}
 	}
@@ -6210,7 +6212,8 @@ static void P_3dMovement(player_t *player)
 		totalthrust.x += P_ReturnThrustX(player->mo, movepushsideangle, movepushside);
 		totalthrust.y += P_ReturnThrustY(player->mo, movepushsideangle, movepushside);
 #else
-		P_Thrust(player->mo, movepushsideangle, movepushside);
+		if (player->dimenu == false)
+			P_Thrust(player->mo, movepushsideangle, movepushside);
 #endif
 	}
 
@@ -6303,14 +6306,17 @@ static void P_SpectatorMovement(player_t *player)
 	player->mo->momx = player->mo->momy = player->mo->momz = 0;
 	if (cmd->forwardmove != 0)
 	{
-		P_Thrust(player->mo, player->mo->angle, cmd->forwardmove*(FRACUNIT/2));
+		if (player->dimenu == false)
+			P_Thrust(player->mo, player->mo->angle, cmd->forwardmove*(FRACUNIT/2));
 
 		// Quake-style flying spectators :D
-		player->mo->momz += FixedMul(cmd->forwardmove*(FRACUNIT/2), AIMINGTOSLOPE(player->aiming));
+		if (player->dimenu == false)
+			player->mo->momz += FixedMul(cmd->forwardmove*(FRACUNIT/2), AIMINGTOSLOPE(player->aiming));
 	}
 	if (cmd->sidemove != 0)
 	{
-		P_Thrust(player->mo, player->mo->angle-ANGLE_90, cmd->sidemove*(FRACUNIT/2));
+		if (player->dimenu == false)
+			P_Thrust(player->mo, player->mo->angle-ANGLE_90, cmd->sidemove*(FRACUNIT/2));
 	}
 }
 

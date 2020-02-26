@@ -1114,10 +1114,11 @@ static menuitem_t OP_ChangeControlsMenu[] =
 	{IT_CALL | IT_STRING2, NULL, "Grenade",          M_ChangeControl, gc_wepslot5    },
 	{IT_CALL | IT_STRING2, NULL, "Explosion",        M_ChangeControl, gc_wepslot6    },
 	{IT_CALL | IT_STRING2, NULL, "Rail",             M_ChangeControl, gc_wepslot7    },
-	{IT_HEADER, NULL, "Add-ons", NULL, 0},
+	{IT_HEADER, NULL, "DI Specific", NULL, 0},
 	{IT_SPACE, NULL, NULL, NULL, 0}, // padding
-	{IT_CALL | IT_STRING2, NULL, "Custom Action 1",  M_ChangeControl, gc_custom1     },
-	{IT_CALL | IT_STRING2, NULL, "Custom Action 2",  M_ChangeControl, gc_custom2     },
+	{IT_CALL | IT_STRING2, NULL, "Swing",  M_ChangeControl, gc_custom1     },
+	{IT_CALL | IT_STRING2, NULL, "Sub Menu",  M_ChangeControl, gc_custom2     },
+	{IT_HEADER, NULL, "Add-ons", NULL, 0},
 	{IT_CALL | IT_STRING2, NULL, "Custom Action 3",  M_ChangeControl, gc_custom3     },
 };
 

@@ -755,7 +755,9 @@ void Got_Filetxpak(void)
 		&& strcmp(filename, "zones.pk3")
 		&& strcmp(filename, "player.dta")
 		&& strcmp(filename, "patch.pk3")
+		&& strcmp(filename, "destructiveillusion.pk3")
 		&& strcmp(filename, "music.dta")
+		&& strcmp(filename, "di_music.dta")
 		))
 		I_Error("Tried to download \"%s\"", filename);
 

@@ -713,6 +713,8 @@ static int player_set(lua_State *L)
 	else if (fastcmp(field,"fovadd"))
 		plr->fovadd = luaL_checkfixed(L, 3);
 #endif
+	else if (fastcmp(field,"dimenu"))
+		plr->dimenu = lua_toboolean(L, 3);
 	else {
 		lua_getfield(L, LUA_REGISTRYINDEX, LREG_EXTVARS);
 		I_Assert(lua_istable(L, -1));
