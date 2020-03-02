@@ -154,6 +154,8 @@ static int player_get(lua_State *L)
 		lua_pushinteger(L, plr->flashpal);
 	else if (fastcmp(field,"skincolor"))
 		lua_pushinteger(L, plr->skincolor);
+	else if (fastcmp(field,"skin"))
+		lua_pushinteger(L, plr->skin);
 	else if (fastcmp(field,"score"))
 		lua_pushinteger(L, plr->score);
 	else if (fastcmp(field,"dashspeed"))
@@ -174,6 +176,8 @@ static int player_get(lua_State *L)
 		lua_pushinteger(L, plr->charability2);
 	else if (fastcmp(field,"charflags"))
 		lua_pushinteger(L, plr->charflags);
+	else if (fastcmp(field,"equipmentavail"))
+		lua_pushinteger(L, plr->equipmentavail);
 	else if (fastcmp(field,"thokitem"))
 		lua_pushinteger(L, plr->thokitem);
 	else if (fastcmp(field,"spinitem"))
@@ -358,6 +362,16 @@ static int player_get(lua_State *L)
 		lua_pushangle(L, plr->awayviewaiming);
 	else if (fastcmp(field,"spectator"))
 		lua_pushboolean(L, plr->spectator);
+	else if (fastcmp(field,"dimenu"))
+		lua_pushboolean(L, plr->dimenu);
+	else if (fastcmp(field,"forward"))
+		lua_pushboolean(L, plr->forward);
+	else if (fastcmp(field,"backward"))
+		lua_pushboolean(L, plr->backward);
+	else if (fastcmp(field,"left"))
+		lua_pushboolean(L, plr->left);
+	else if (fastcmp(field,"right"))
+		lua_pushboolean(L, plr->right);
 	else if (fastcmp(field,"outofcoop"))
 		lua_pushboolean(L, plr->outofcoop);
 	else if (fastcmp(field,"bot"))
@@ -463,6 +477,13 @@ static int player_set(lua_State *L)
 			return luaL_error(L, "player.skincolor %d out of range (0 - %d).", newcolor, MAXSKINCOLORS-1);
 		plr->skincolor = newcolor;
 	}
+	else if (fastcmp(field,"skin"))
+	{
+		UINT8 newskin = (UINT8)luaL_checkinteger(L,3);
+		if (newskin >= MAXSKINS)
+			return luaL_error(L, "player.skin %d out of range (0 - %d).", newskin, MAXSKINS-1);
+		plr->skin = newskin;
+	}
 	else if (fastcmp(field,"score"))
 		plr->score = (UINT32)luaL_checkinteger(L, 3);
 	else if (fastcmp(field,"dashspeed"))
@@ -483,6 +504,8 @@ static int player_set(lua_State *L)
 		plr->charability2 = (UINT8)luaL_checkinteger(L, 3);
 	else if (fastcmp(field,"charflags"))
 		plr->charflags = (UINT32)luaL_checkinteger(L, 3);
+	else if (fastcmp(field,"equipmentavail"))
+		plr->equipmentavail = (UINT32)luaL_checkinteger(L, 3);
 	else if (fastcmp(field,"thokitem"))
 		plr->thokitem = luaL_checkinteger(L, 3);
 	else if (fastcmp(field,"spinitem"))
@@ -715,6 +738,14 @@ static int player_set(lua_State *L)
 #endif
 	else if (fastcmp(field,"dimenu"))
 		plr->dimenu = lua_toboolean(L, 3);
+	else if (fastcmp(field,"forward"))
+		plr->forward = lua_toboolean(L, 3);
+	else if (fastcmp(field,"backward"))
+		plr->backward = lua_toboolean(L, 3);
+	else if (fastcmp(field,"left"))
+		plr->left = lua_toboolean(L, 3);
+	else if (fastcmp(field,"right"))
+		plr->right = lua_toboolean(L, 3);
 	else {
 		lua_getfield(L, LUA_REGISTRYINDEX, LREG_EXTVARS);
 		I_Assert(lua_istable(L, -1));

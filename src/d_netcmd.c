@@ -1247,6 +1247,7 @@ static void SendNameAndColor(void)
 		return;
 
 	players[consoleplayer].availabilities = R_GetSkinAvailabilities();
+	players[consoleplayer].equipmentavail = R_GetEquipmentAvailabilities();
 
 	// We'll handle it later if we're not playing.
 	if (!Playing())
@@ -1326,6 +1327,7 @@ static void SendNameAndColor(void)
 	// Finally write out the complete packet and send it off.
 	WRITESTRINGN(p, cv_playername.zstring, MAXPLAYERNAME);
 	WRITEUINT32(p, (UINT32)players[consoleplayer].availabilities);
+	WRITEUINT32(p, (UINT32)players[consoleplayer].equipmentavail);
 	WRITEUINT8(p, (UINT8)cv_playercolor.value);
 	WRITEUINT8(p, (UINT8)cv_skin.value);
 	SendNetXCmd(XD_NAMEANDCOLOR, buf, p - buf);
@@ -1365,6 +1367,7 @@ static void SendNameAndColor2(void)
 	}
 
 	players[secondplaya].availabilities = R_GetSkinAvailabilities();
+	players[secondplaya].equipmentavail = R_GetEquipmentAvailabilities();
 
 	// We'll handle it later if we're not playing.
 	if (!Playing())
@@ -1455,6 +1458,7 @@ static void Got_NameAndColor(UINT8 **cp, INT32 playernum)
 
 	READSTRINGN(*cp, name, MAXPLAYERNAME);
 	p->availabilities = READUINT32(*cp);
+	p->equipmentavail = READUINT32(*cp);
 	color = READUINT8(*cp);
 	skin = READUINT8(*cp);
 
@@ -4245,6 +4249,7 @@ void Command_ExitGame_f(void)
 		CL_ClearPlayer(i);
 
 	players[consoleplayer].availabilities = players[1].availabilities = R_GetSkinAvailabilities(); // players[1] is supposed to be for 2p
+	players[consoleplayer].equipmentavail = players[1].equipmentavail = R_GetEquipmentAvailabilities(); // players[1] is supposed to be for 2p
 
 	splitscreen = false;
 	SplitScreen_OnChange();

@@ -3126,6 +3126,18 @@ UINT32 R_GetSkinAvailabilities(void)
 	return response;
 }
 
+UINT32 R_GetEquipmentAvailabilities(void)
+{
+	INT32 s;
+	UINT32 response = 0;
+
+	if (unlockables[13].unlocked) //Unlocked Equipment Stuff!
+		response = 2;
+	else
+		response = 1;
+	return response;
+}
+
 // returns true if available in circumstances, otherwise nope
 // warning don't use with an invalid skinnum other than -1 which always returns true
 boolean R_SkinUsable(INT32 playernum, INT32 skinnum)

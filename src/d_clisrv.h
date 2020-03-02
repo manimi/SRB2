@@ -190,6 +190,7 @@ typedef struct
 	UINT8 skincolor;
 	INT32 skin;
 	UINT32 availabilities;
+	UINT32 equipmentavail;
 	// Just in case Lua does something like
 	// modify these at runtime
 	fixed_t camerascale;
@@ -290,6 +291,8 @@ typedef struct
 	fixed_t scale;
 	fixed_t destscale;
 	fixed_t scalespeed;
+
+	UINT8 dimenu;
 } ATTRPACK resynch_pak;
 
 typedef struct
@@ -309,6 +312,7 @@ typedef struct
 	UINT8 playerskins[MAXPLAYERS];
 	UINT8 playercolor[MAXPLAYERS];
 	UINT32 playeravailabilities[MAXPLAYERS];
+	UINT32 playerequipmentavail[MAXPLAYERS];
 
 	UINT8 gametype;
 	UINT8 modifiedgame;
@@ -563,6 +567,7 @@ void ReadLmpExtraData(UINT8 **demo_pointer, INT32 playernum);*/
 SINT8 nametonum(const char *name);
 #endif
 
+extern char bluecolor[12], blackcolor[12];
 extern char motd[254], server_context[8];
 extern UINT8 playernode[MAXPLAYERS];
 

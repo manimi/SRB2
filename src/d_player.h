@@ -365,6 +365,7 @@ typedef struct player_s
 
 	INT32 skin;
 	UINT32 availabilities;
+	UINT32 equipmentavail;
 
 	UINT32 score; // player score
 	fixed_t dashspeed; // dashing speed
@@ -518,6 +519,10 @@ typedef struct player_s
 	fixed_t fovadd; // adjust FOV for hw rendering
 #endif
 	boolean dimenu;
+	boolean forward;
+	boolean backward;
+	boolean left;
+	boolean right;
 } player_t;
 
 // Values for dashmode

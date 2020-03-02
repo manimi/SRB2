@@ -13,6 +13,7 @@
 #include "doomdef.h"
 #include "d_main.h" // for srb2home
 #include "g_game.h"
+#include "g_input.h" //added for gc_ ...
 #include "sounds.h"
 #include "info.h"
 #include "d_think.h"
@@ -9765,6 +9766,49 @@ struct {
 	{"BT_CUSTOM1",BT_CUSTOM1}, // Lua customizable
 	{"BT_CUSTOM2",BT_CUSTOM2}, // Lua customizable
 	{"BT_CUSTOM3",BT_CUSTOM3}, // Lua customizable
+
+	// Game Controls (g_input.h)
+	{"gc_null",gc_null}, //our first four bits.
+	{"gc_weaponnext",gc_weaponnext},
+	{"gc_weaponprev",gc_weaponprev},
+	{"gc_fire",gc_fire}, // shoot rings
+	{"gc_use",gc_use}, // spin
+	{"gc_turnleft",gc_turnleft}, // turn camera left
+	{"gc_turnright",gc_turnright}, // turn camera right
+	{"gc_tossflag",gc_tossflag},
+	{"gc_jump",gc_jump},
+	{"gc_firenormal",gc_firenormal}, // Fire a normal ring no matter what
+	{"gc_custom1",gc_custom1}, // Lua customizable
+	{"gc_custom2",gc_custom2}, // Lua customizable
+	{"gc_custom3",gc_custom3}, // Lua customizable
+	{"gc_forward",gc_forward}, // forward
+	{"gc_backward",gc_backward}, // backward
+	{"gc_strafeleft",gc_strafeleft}, // left
+	{"gc_wepslot1",gc_wepslot1}, 
+	{"gc_wepslot2",gc_wepslot2}, 
+	{"gc_wepslot3",gc_wepslot3}, 
+	{"gc_wepslot4",gc_wepslot4}, 
+	{"gc_wepslot5",gc_wepslot5}, 
+	{"gc_wepslot6",gc_wepslot6}, 
+	{"gc_wepslot7",gc_wepslot7}, 
+	{"gc_wepslot8",gc_wepslot8}, 
+	{"gc_wepslot9",gc_wepslot9}, 
+	{"gc_wepslot10",gc_wepslot10}, 
+	{"gc_camtoggle",gc_camtoggle}, 
+	{"gc_camreset",gc_camreset}, 
+	{"gc_lookup",gc_lookup}, 
+	{"gc_lookdown",gc_lookdown}, 
+	{"gc_centerview",gc_centerview}, 
+	{"gc_mouseaiming",gc_mouseaiming}, 
+	{"gc_talkkey",gc_talkkey}, 
+	{"gc_teamkey",gc_teamkey}, 
+	{"gc_scores",gc_scores}, 
+	{"gc_console",gc_console},
+	{"gc_pause",gc_pause},
+	{"gc_systemmenu",gc_systemmenu},
+	{"gc_screenshot",gc_screenshot},
+	{"gc_recordgif",gc_recordgif},
+	{"gc_viewpoint",gc_viewpoint},
 
 	// Lua command registration flags
 	{"COM_ADMIN",COM_ADMIN},

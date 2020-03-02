@@ -158,7 +158,7 @@ int main(int argc, char **argv)
 		}
 		else
 		{
-			format = "log-%Y-%m-%d_%H-%M-%S.txt";
+			format = "log_di-%Y-%m-%d_%H-%M-%S.txt";
 			fileabs = false;
 		}
 

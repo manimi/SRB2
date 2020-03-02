@@ -131,21 +131,21 @@ extern char logfilename[1024];
 #endif
 
 /* A mod name to further distinguish versions. */
-#define SRB2APPLICATION "SRB2"
+#define SRB2APPLICATION "SRB2 DI"
 
 //#define DEVELOP // Disable this for release builds to remove excessive cheat commands and enable MD5 checking and stuff, all in one go. :3
 #ifdef DEVELOP
 #define VERSION    0 // Game version
 #define SUBVERSION 0 // more precise version number
-#define VERSIONSTRING "Development EXE"
-#define VERSIONSTRINGW L"Development EXE"
+#define VERSIONSTRING "Destructive Illusion"
+#define VERSIONSTRINGW L"Destructive Illusion"
 // most interface strings are ignored in development mode.
 // we use comprevision and compbranch instead.
 #else
 #define VERSION    202 // Game version
 #define SUBVERSION 2  // more precise version number
-#define VERSIONSTRING "v2.2.2"
-#define VERSIONSTRINGW L"v2.2.2"
+#define VERSIONSTRING "v1.0.0"
+#define VERSIONSTRINGW L"v1.0.0"
 // Hey! If you change this, add 1 to the MODVERSION below!
 // Otherwise we can't force updates!
 #endif
@@ -210,7 +210,7 @@ extern char logfilename[1024];
 // it's only for detection of the version the player is using so the MS can alert them of an update.
 // Only set it higher, not lower, obviously.
 // Note that we use this to help keep internal testing in check; this is why v2.2.0 is not version "1".
-#define MODVERSION 42
+#define MODVERSION 421
 
 // To version config.cfg, MAJOREXECVERSION is set equal to MODVERSION automatically.
 // Increment MINOREXECVERSION whenever a config change is needed that does not correspond

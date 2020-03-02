@@ -5877,7 +5877,7 @@ static void P_2dMovement(player_t *player)
 //////////////////////////////////////
 	if (player->climbing)
 	{
-		if (cmd->forwardmove != 0)
+		if (cmd->forwardmove != 0 && player->dimenu == false)
 			P_SetObjectMomZ(player->mo, FixedDiv(cmd->forwardmove*FRACUNIT, 15*FRACUNIT>>1), false);
 
 		player->mo->momx = 0;
@@ -5901,7 +5901,7 @@ static void P_2dMovement(player_t *player)
 		}
 
 		movepushforward = FixedMul(movepushforward, player->mo->scale);
-		if (player->rmomx < topspeed && cmd->sidemove > 0) // Sonic's Speed
+		if (player->rmomx < topspeed && cmd->sidemove > 0 && player->dimenu == false) // Sonic's Speed
 			P_Thrust(player->mo, movepushangle, movepushforward);
 		else if (player->rmomx > -topspeed && cmd->sidemove < 0)
 			P_Thrust(player->mo, movepushangle, movepushforward);

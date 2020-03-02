@@ -1886,7 +1886,7 @@ static int W_VerifyFile(const char *filename, lumpchecklist_t *checklist,
   */
 int W_VerifyNMUSlumps(const char *filename)
 {
-if (strcmpi(filename, "destructiveillusion.pk3") == 0)
+if (strcmpi(filename, "di_main.pk3") == 0)
     return 1;
 	// MIDI, MOD/S3M/IT/XM/OGG/MP3/WAV, WAVE SFX
 	// ENDOOM text and palette lumps

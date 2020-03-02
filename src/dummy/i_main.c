@@ -8,7 +8,7 @@ int main(int argc, char **argv)
 	myargv = argv; /// \todo pull out path to exe from this string
 
 	// startup SRB2
-	CONS_Printf("Setting up SRB2...\n");
+	CONS_Printf("Setting up SRB2 DI...\n");
 	D_SRB2Main();
 	CONS_Printf("Entering main game loop...\n");
 	// never return

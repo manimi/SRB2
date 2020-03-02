@@ -68,6 +68,8 @@
 #define PREDICTIONMASK (PREDICTIONQUEUE-1)
 #define MAX_REASONLENGTH 30
 
+char bluecolor[12], blackcolor[12];
+
 boolean server = true; // true or false but !server == client
 #define client (!server)
 boolean nodownload = false;
@@ -541,6 +543,7 @@ static inline void resynch_write_player(resynch_pak *rsp, const size_t i)
 	rsp->skincolor = players[i].skincolor;
 	rsp->skin = LONG(players[i].skin);
 	rsp->availabilities = LONG(players[i].availabilities);
+	rsp->equipmentavail = LONG(players[i].equipmentavail);
 	// Just in case Lua does something like
 	// modify these at runtime
 	rsp->camerascale = (fixed_t)LONG(players[i].camerascale);
@@ -682,6 +685,7 @@ static void resynch_read_player(resynch_pak *rsp)
 	players[i].skincolor = rsp->skincolor;
 	players[i].skin = LONG(rsp->skin);
 	players[i].availabilities = LONG(rsp->availabilities);
+	players[i].equipmentavail = LONG(rsp->equipmentavail);
 	// Just in case Lua does something like
 	// modify these at runtime
 	players[i].camerascale = (fixed_t)LONG(rsp->camerascale);
@@ -1440,6 +1444,7 @@ static boolean SV_SendServerConfig(INT32 node)
 	memset(netbuffer->u.servercfg.playerskins, 0xFF, sizeof(netbuffer->u.servercfg.playerskins));
 	memset(netbuffer->u.servercfg.playercolor, 0xFF, sizeof(netbuffer->u.servercfg.playercolor));
 	memset(netbuffer->u.servercfg.playeravailabilities, 0xFF, sizeof(netbuffer->u.servercfg.playeravailabilities));
+	memset(netbuffer->u.servercfg.playerequipmentavail, 0xFF, sizeof(netbuffer->u.servercfg.playerequipmentavail));
 
 	memset(netbuffer->u.servercfg.adminplayers, -1, sizeof(netbuffer->u.servercfg.adminplayers));
 
@@ -1452,6 +1457,7 @@ static boolean SV_SendServerConfig(INT32 node)
 		netbuffer->u.servercfg.playerskins[i] = (UINT8)players[i].skin;
 		netbuffer->u.servercfg.playercolor[i] = (UINT8)players[i].skincolor;
 		netbuffer->u.servercfg.playeravailabilities[i] = (UINT32)LONG(players[i].availabilities);
+		netbuffer->u.servercfg.playerequipmentavail[i] = (UINT32)LONG(players[i].equipmentavail);
 	}
 
 	memcpy(netbuffer->u.servercfg.server_context, server_context, 8);
@@ -3066,12 +3072,15 @@ consvar_t cv_backnum = {"backnum", "2", CV_SAVE, backnum_cons_t, NULL, 0, NULL, 
 static CV_PossibleValue_t topnum_cons_t[] = {{1, "MIN"}, {10, "MAX"}, {0, NULL}};
 consvar_t cv_topnum = {"topnum", "1", CV_SAVE, topnum_cons_t, NULL, 0, NULL, NULL, 0, 0, NULL};
 
+//snprintf(bluecolor, 12, "%d", SKINCOLOR_BLUE);        sigh
+//snprintf(blackcolor, 12, "%d", SKINCOLOR_BLACK);
+
 // Colorbacknum
-static CV_PossibleValue_t colorbacknum_cons_t[] = {{1, "MIN"}, {63, "MAX"}, {0, NULL}};
-consvar_t cv_colorbacknum = {"colorbacknum", "50", CV_SAVE, colorbacknum_cons_t, NULL, 0, NULL, NULL, 0, 0, NULL};
+static CV_PossibleValue_t colorbacknum_cons_t[] = {{1, "MIN"}, {MAXSKINCOLORS, "MAX"}, {0, NULL}};
+consvar_t cv_colorbacknum = {"colorbacknum", "55", CV_SAVE, colorbacknum_cons_t, NULL, 0, NULL, NULL, 0, 0, NULL};
 
 // Colortopnum
-static CV_PossibleValue_t colortopnum_cons_t[] = {{1, "MIN"}, {63, "MAX"}, {0, NULL}};
+static CV_PossibleValue_t colortopnum_cons_t[] = {{1, "MIN"}, {MAXSKINCOLORS, "MAX"}, {0, NULL}};
 consvar_t cv_colortopnum = {"colortopnum", "8", CV_SAVE, colortopnum_cons_t, NULL, 0, NULL, NULL, 0, 0, NULL};
 
 static void Got_AddPlayer(UINT8 **p, INT32 playernum);
@@ -3879,10 +3888,12 @@ static void HandlePacketFromAwayNode(SINT8 node)
 				if (netbuffer->u.servercfg.playerskins[j] == 0xFF
 				 && netbuffer->u.servercfg.playercolor[j] == 0xFF
 				 && netbuffer->u.servercfg.playeravailabilities[j] == 0xFFFFFFFF)
+				 && netbuffer->u.servercfg.playerequipmentavail[j] == 0xFFFFFFFF)
 					continue; // not in game
 
 				playeringame[j] = true;
 				players[j].availabilities = (UINT32)LONG(netbuffer->u.servercfg.playeravailabilities[j]);
+				players[j].equipmentavail = (UINT32)LONG(netbuffer->u.servercfg.playerequipmentavail[j]);
 				SetPlayerSkinByNum(j, (INT32)netbuffer->u.servercfg.playerskins[j]);
 				players[j].skincolor = netbuffer->u.servercfg.playercolor[j];
 			}

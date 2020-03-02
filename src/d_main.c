@@ -804,6 +804,7 @@ void D_StartTitle(void)
 		CL_ClearPlayer(i);
 
 	players[consoleplayer].availabilities = players[1].availabilities = R_GetSkinAvailabilities(); // players[1] is supposed to be for 2p
+	players[consoleplayer].equipmentavail = players[1].equipmentavail = R_GetEquipmentAvailabilities(); // players[1] is supposed to be for 2p
 
 	splitscreen = false;
 	SplitScreen_OnChange();
@@ -948,7 +949,7 @@ static void IdentifyVersion(void)
 	D_AddFile(va(pandf,srb2waddir,"patch.pk3"));
 #endif
 	// Add the core pk3
-	D_AddFile(va(pandf,srb2waddir,"destructiveillusion.pk3"));
+	D_AddFile(va(pandf,srb2waddir,"di_main.pk3"));
 
 #if !defined (HAVE_SDL) || defined (HAVE_MIXER)
 	{
@@ -1008,8 +1009,8 @@ static inline void D_Titlebar(void)
 	char title1[82]; // srb2 title banner
 	char title2[82];
 
-	strcpy(title1, "Sonic Robo Blast 2");
-	strcpy(title2, "Sonic Robo Blast 2");
+	strcpy(title1, "Sonic Robo Blast 2 Destructive Illusion");
+	strcpy(title2, "Sonic Robo Blast 2 Destructive Illusion");
 
 	D_MakeTitleString(title1);
 
@@ -1041,7 +1042,7 @@ void D_SRB2Main(void)
 
 	// Print GPL notice for our console users (Linux)
 	CONS_Printf(
-	"\n\nSonic Robo Blast 2\n"
+	"\n\nSonic Robo Blast 2 Destructive Illusion\n"
 	"Copyright (C) 1998-2020 by Sonic Team Junior\n\n"
 	"This program comes with ABSOLUTELY NO WARRANTY.\n\n"
 	"This is free software, and you are welcome to redistribute it\n"
