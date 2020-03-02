@@ -251,7 +251,6 @@ boolean R_SkinUsable(INT32 playernum, INT32 skinnum);
 UINT32 R_GetSkinAvailabilities(void);
 UINT32 R_GetEquipmentAvailabilities(void);
 INT32 R_SkinAvailable(const char *name);
-INT32 R_EquipmentColorAvailable(const char *name);
 void R_PatchSkins(UINT16 wadnum);
 void R_AddSkins(UINT16 wadnum);
 

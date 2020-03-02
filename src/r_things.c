@@ -3128,7 +3128,6 @@ UINT32 R_GetSkinAvailabilities(void)
 
 UINT32 R_GetEquipmentAvailabilities(void)
 {
-	INT32 s;
 	UINT32 response = 0;
 
 	if (unlockables[13].unlocked) //Unlocked Equipment Stuff!
