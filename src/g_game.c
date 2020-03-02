@@ -2729,6 +2729,8 @@ static boolean G_CheckSpot(INT32 playernum, mapthing_t *mthing)
 //
 void G_SpawnPlayer(INT32 playernum)
 {
+	player_t *player = &players[playernum];
+
 	if (!playeringame[playernum])
 		return;
 
