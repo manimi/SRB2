@@ -3887,7 +3887,7 @@ static void HandlePacketFromAwayNode(SINT8 node)
 			{
 				if (netbuffer->u.servercfg.playerskins[j] == 0xFF
 				 && netbuffer->u.servercfg.playercolor[j] == 0xFF
-				 && netbuffer->u.servercfg.playeravailabilities[j] == 0xFFFFFFFF)
+				 && netbuffer->u.servercfg.playeravailabilities[j] == 0xFFFFFFFF
 				 && netbuffer->u.servercfg.playerequipmentavail[j] == 0xFFFFFFFF)
 					continue; // not in game
 
