@@ -2628,6 +2628,12 @@ void G_PlayerReborn(INT32 player, boolean betweenmaps)
 		//p->powers[pw_flashing] = flashingtics-1; // Babysitting deterrent
 
 	// Check to make sure their color didn't change somehow...
+
+	p->backsel = cv_backnum.value;
+	p->topsel = cv_topnum.value;
+	p->colorbacksel = cv_colorbacknum.value;
+	p->colortopsel = cv_colortopnum.value;
+
 	if (G_GametypeHasTeams())
 	{
 		if (p->ctfteam == 1 && p->skincolor != skincolor_redteam)
@@ -2728,6 +2734,10 @@ void G_SpawnPlayer(INT32 playernum)
 
 	P_SpawnPlayer(playernum);
 	G_MovePlayerToSpawnOrStarpost(playernum);
+	player->backsel = cv_backnum.value;
+	player->colorbacksel = cv_colorbacknum.value;
+	player->topsel = cv_topnum.value;
+	player->colortopsel = cv_colortopnum.value;
 #ifdef HAVE_BLUA
 	LUAh_PlayerSpawn(&players[playernum]); // Lua hook for player spawning :)
 #endif
