@@ -2446,7 +2446,7 @@ void G_PlayerReborn(INT32 player, boolean betweenmaps)
 	UINT8 skincolor;
 	INT32 skin;
 	UINT32 availabilities;
-	UINT32 equipmentavail;
+	INT32 equipmentavail;
 	tic_t jointime;
 	tic_t quittime;
 	boolean spectator;
@@ -2460,6 +2460,10 @@ void G_PlayerReborn(INT32 player, boolean betweenmaps)
 	boolean backward;
 	boolean left;
 	boolean right;
+	UINT8 backsel;
+	UINT8 topsel;
+	UINT8 colorbacksel;
+	UINT8 colortopsel;
 
 	score = players[player].score;
 	lives = players[player].lives;
@@ -2492,6 +2496,12 @@ void G_PlayerReborn(INT32 player, boolean betweenmaps)
 	skin = players[player].skin;
 	availabilities = players[player].availabilities;
 	equipmentavail = players[player].equipmentavail;
+
+	backsel = players[player].backsel;
+	topsel = players[player].topsel;
+	colorbacksel = players[player].colorbacksel;
+	colortopsel = players[player].colortopsel;
+
 	camerascale = players[player].camerascale;
 	shieldscale = players[player].shieldscale;
 	charability = players[player].charability;
@@ -2559,6 +2569,12 @@ void G_PlayerReborn(INT32 player, boolean betweenmaps)
 	p->skin = skin;
 	p->availabilities = availabilities;
 	p->equipmentavail = equipmentavail;
+
+	p->backsel = backsel;
+	p->topsel = topsel;
+	p->colorbacksel = colorbacksel;
+	p->colortopsel = colortopsel;
+
 	p->camerascale = camerascale;
 	p->shieldscale = shieldscale;
 	p->charability = charability;

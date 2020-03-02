@@ -128,6 +128,14 @@ static int player_get(lua_State *L)
 		lua_pushangle(L, plr->drawangle);
 	else if (fastcmp(field,"rings"))
 		lua_pushinteger(L, plr->rings);
+	else if (fastcmp(field,"backsel"))
+		lua_pushinteger(L, plr->backsel);
+	else if (fastcmp(field,"topsel"))
+		lua_pushinteger(L, plr->topsel);
+	else if (fastcmp(field,"colorbacksel"))
+		lua_pushinteger(L, plr->colorbacksel);
+	else if (fastcmp(field,"colortopsel"))
+		lua_pushinteger(L, plr->colortopsel);
 	else if (fastcmp(field,"spheres"))
 		lua_pushinteger(L, plr->spheres);
 	else if (fastcmp(field,"pity"))
@@ -446,6 +454,14 @@ static int player_set(lua_State *L)
 		plr->drawangle = luaL_checkangle(L, 3);
 	else if (fastcmp(field,"rings"))
 		plr->rings = (INT32)luaL_checkinteger(L, 3);
+	else if (fastcmp(field,"backsel"))
+		plr->backsel = luaL_checkinteger(L, 3);
+	else if (fastcmp(field,"topsel"))
+		plr->topsel = luaL_checkinteger(L, 3);
+	else if (fastcmp(field,"colorbacksel"))
+		plr->colorbacksel = luaL_checkinteger(L, 3);
+	else if (fastcmp(field,"colortopsel"))
+		plr->colortopsel = luaL_checkinteger(L, 3);
 	else if (fastcmp(field,"spheres"))
 		plr->spheres = (INT32)luaL_checkinteger(L, 3);
 	else if (fastcmp(field,"pity"))
@@ -505,7 +521,7 @@ static int player_set(lua_State *L)
 	else if (fastcmp(field,"charflags"))
 		plr->charflags = (UINT32)luaL_checkinteger(L, 3);
 	else if (fastcmp(field,"equipmentavail"))
-		plr->equipmentavail = (UINT32)luaL_checkinteger(L, 3);
+		plr->equipmentavail = (INT32)luaL_checkinteger(L, 3);
 	else if (fastcmp(field,"thokitem"))
 		plr->thokitem = luaL_checkinteger(L, 3);
 	else if (fastcmp(field,"spinitem"))

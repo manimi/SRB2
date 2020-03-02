@@ -533,6 +533,12 @@ static inline void resynch_write_player(resynch_pak *rsp, const size_t i)
 
 	// Score is resynched in the rspfirm resync packet
 	rsp->rings = SHORT(players[i].rings);
+
+	rsp->backsel = (UINT8)players[i].backsel;
+	rsp->topsel = (UINT8)players[i].topsel;
+	rsp->colorbacksel = (UINT8)players[i].colorbacksel;
+	rsp->colortopsel = (UINT8)players[i].colortopsel;
+
 	rsp->spheres = SHORT(players[i].spheres);
 	rsp->lives = players[i].lives;
 	rsp->continues = players[i].continues;
@@ -543,7 +549,7 @@ static inline void resynch_write_player(resynch_pak *rsp, const size_t i)
 	rsp->skincolor = players[i].skincolor;
 	rsp->skin = LONG(players[i].skin);
 	rsp->availabilities = LONG(players[i].availabilities);
-	rsp->equipmentavail = LONG(players[i].equipmentavail);
+	rsp->equipmentavail = SHORT(players[i].equipmentavail);
 	// Just in case Lua does something like
 	// modify these at runtime
 	rsp->camerascale = (fixed_t)LONG(players[i].camerascale);
@@ -675,6 +681,12 @@ static void resynch_read_player(resynch_pak *rsp)
 
 	// Score is resynched in the rspfirm resync packet
 	players[i].rings = SHORT(rsp->rings);
+
+	players[i].backsel = (UINT8)rsp->backsel;
+	players[i].topsel = (UINT8)rsp->topsel;
+	players[i].colorbacksel = (UINT8)rsp->colorbacksel;
+	players[i].colortopsel = (UINT8)rsp->colortopsel;
+
 	players[i].spheres = SHORT(rsp->spheres);
 	players[i].lives = rsp->lives;
 	players[i].continues = rsp->continues;
@@ -685,7 +697,7 @@ static void resynch_read_player(resynch_pak *rsp)
 	players[i].skincolor = rsp->skincolor;
 	players[i].skin = LONG(rsp->skin);
 	players[i].availabilities = LONG(rsp->availabilities);
-	players[i].equipmentavail = LONG(rsp->equipmentavail);
+	players[i].equipmentavail = SHORT(rsp->equipmentavail);
 	// Just in case Lua does something like
 	// modify these at runtime
 	players[i].camerascale = (fixed_t)LONG(rsp->camerascale);
@@ -1457,7 +1469,7 @@ static boolean SV_SendServerConfig(INT32 node)
 		netbuffer->u.servercfg.playerskins[i] = (UINT8)players[i].skin;
 		netbuffer->u.servercfg.playercolor[i] = (UINT8)players[i].skincolor;
 		netbuffer->u.servercfg.playeravailabilities[i] = (UINT32)LONG(players[i].availabilities);
-		netbuffer->u.servercfg.playerequipmentavail[i] = (UINT32)LONG(players[i].equipmentavail);
+		netbuffer->u.servercfg.playerequipmentavail[i] = (INT32)SHORT(players[i].equipmentavail);
 	}
 
 	memcpy(netbuffer->u.servercfg.server_context, server_context, 8);
@@ -3887,13 +3899,13 @@ static void HandlePacketFromAwayNode(SINT8 node)
 			{
 				if (netbuffer->u.servercfg.playerskins[j] == 0xFF
 				 && netbuffer->u.servercfg.playercolor[j] == 0xFF
-				 && netbuffer->u.servercfg.playeravailabilities[j] == 0xFFFFFFFF
-				 && netbuffer->u.servercfg.playerequipmentavail[j] == 0xFFFFFFFF)
+				 && netbuffer->u.servercfg.playeravailabilities[j] == 0xFFFFFFFF)
+				 //&& netbuffer->u.servercfg.playerequipmentavail[j] == 0xFFFFFFFF)
 					continue; // not in game
 
 				playeringame[j] = true;
 				players[j].availabilities = (UINT32)LONG(netbuffer->u.servercfg.playeravailabilities[j]);
-				players[j].equipmentavail = (UINT32)LONG(netbuffer->u.servercfg.playerequipmentavail[j]);
+				players[j].equipmentavail = (INT32)SHORT(netbuffer->u.servercfg.playerequipmentavail[j]);
 				SetPlayerSkinByNum(j, (INT32)netbuffer->u.servercfg.playerskins[j]);
 				players[j].skincolor = netbuffer->u.servercfg.playercolor[j];
 			}

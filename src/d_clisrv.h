@@ -180,6 +180,12 @@ typedef struct
 
 	// Score is resynched in the confirm resync packet
 	INT16 rings;
+	
+	UINT8 backsel;
+	UINT8 topsel;
+	UINT8 colorbacksel;
+	UINT8 colortopsel;
+
 	INT16 spheres;
 	SINT8 lives;
 	SINT8 continues;
@@ -190,7 +196,7 @@ typedef struct
 	UINT8 skincolor;
 	INT32 skin;
 	UINT32 availabilities;
-	UINT32 equipmentavail;
+	INT32 equipmentavail;
 	// Just in case Lua does something like
 	// modify these at runtime
 	fixed_t camerascale;
@@ -312,7 +318,7 @@ typedef struct
 	UINT8 playerskins[MAXPLAYERS];
 	UINT8 playercolor[MAXPLAYERS];
 	UINT32 playeravailabilities[MAXPLAYERS];
-	UINT32 playerequipmentavail[MAXPLAYERS];
+	INT32 playerequipmentavail[MAXPLAYERS];
 
 	UINT8 gametype;
 	UINT8 modifiedgame;

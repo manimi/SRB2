@@ -365,7 +365,12 @@ typedef struct player_s
 
 	INT32 skin;
 	UINT32 availabilities;
-	UINT32 equipmentavail;
+	INT32 equipmentavail;
+
+	UINT8 backsel;
+	UINT8 topsel;
+	UINT8 colorbacksel;
+	UINT8 colortopsel;
 
 	UINT32 score; // player score
 	fixed_t dashspeed; // dashing speed

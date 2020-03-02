@@ -1327,7 +1327,7 @@ static void SendNameAndColor(void)
 	// Finally write out the complete packet and send it off.
 	WRITESTRINGN(p, cv_playername.zstring, MAXPLAYERNAME);
 	WRITEUINT32(p, (UINT32)players[consoleplayer].availabilities);
-	WRITEUINT32(p, (UINT32)players[consoleplayer].equipmentavail);
+	WRITEINT32(p, (INT32)players[consoleplayer].equipmentavail);
 	WRITEUINT8(p, (UINT8)cv_playercolor.value);
 	WRITEUINT8(p, (UINT8)cv_skin.value);
 	SendNetXCmd(XD_NAMEANDCOLOR, buf, p - buf);
@@ -1458,7 +1458,7 @@ static void Got_NameAndColor(UINT8 **cp, INT32 playernum)
 
 	READSTRINGN(*cp, name, MAXPLAYERNAME);
 	p->availabilities = READUINT32(*cp);
-	p->equipmentavail = READUINT32(*cp);
+	p->equipmentavail = READINT32(*cp);
 	color = READUINT8(*cp);
 	skin = READUINT8(*cp);
 
