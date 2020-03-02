@@ -286,7 +286,7 @@ void M_SilentUpdateUnlockablesAndEmblems(void)
 	}
 
 	players[consoleplayer].availabilities = players[1].availabilities = R_GetSkinAvailabilities(); // players[1] is supposed to be for 2p
-	players[consoleplayer].equipmentavail = players[1].equipmentavail = R_GetEquipmentAvailabilities(); // players[1] is supposed to be for 2p
+	//players[consoleplayer].equipmentavail = players[1].equipmentavail = R_GetEquipmentAvailabilities(); // players[1] is supposed to be for 2p
 }
 
 // Emblem unlocking shit
