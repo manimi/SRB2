@@ -1403,6 +1403,10 @@ static void SV_SendPlayerInfo(INT32 node)
 		}
 
 		netbuffer->u.playerinfo[i].score = LONG(players[i].score);
+		netbuffer->u.playerinfo[i].backnum = (UINT8)(players[i].backsel);
+		netbuffer->u.playerinfo[i].topnum = (UINT8)(players[i].topsel);
+		netbuffer->u.playerinfo[i].colorbacknum = (UINT8)(players[i].colorbacksel);
+		netbuffer->u.playerinfo[i].colortopnum = (UINT8)(players[i].colortopsel);
 		netbuffer->u.playerinfo[i].timeinserver = SHORT((UINT16)(players[i].jointime / TICRATE));
 		netbuffer->u.playerinfo[i].skin = (UINT8)(players[i].skin
 #ifdef DEVELOP // it's safe to do this only because PLAYERINFO isn't read by the game itself
@@ -1455,6 +1459,10 @@ static boolean SV_SendServerConfig(INT32 node)
 	// which is nice and easy for us to detect
 	memset(netbuffer->u.servercfg.playerskins, 0xFF, sizeof(netbuffer->u.servercfg.playerskins));
 	memset(netbuffer->u.servercfg.playercolor, 0xFF, sizeof(netbuffer->u.servercfg.playercolor));
+	memset(netbuffer->u.servercfg.backnum, 0xFF, sizeof(netbuffer->u.servercfg.backnum));
+	memset(netbuffer->u.servercfg.topnum, 0xFF, sizeof(netbuffer->u.servercfg.topnum));
+	memset(netbuffer->u.servercfg.colorbacknum, 0xFF, sizeof(netbuffer->u.servercfg.colorbacknum));
+	memset(netbuffer->u.servercfg.colortopnum, 0xFF, sizeof(netbuffer->u.servercfg.colortopnum));
 	memset(netbuffer->u.servercfg.playeravailabilities, 0xFF, sizeof(netbuffer->u.servercfg.playeravailabilities));
 	memset(netbuffer->u.servercfg.playerequipmentavail, 0xFF, sizeof(netbuffer->u.servercfg.playerequipmentavail));
 
@@ -1468,6 +1476,10 @@ static boolean SV_SendServerConfig(INT32 node)
 			continue;
 		netbuffer->u.servercfg.playerskins[i] = (UINT8)players[i].skin;
 		netbuffer->u.servercfg.playercolor[i] = (UINT8)players[i].skincolor;
+		netbuffer->u.servercfg.backnum[i] = (UINT8)players[i].backsel;
+		netbuffer->u.servercfg.topnum[i] = (UINT8)players[i].topsel;
+		netbuffer->u.servercfg.colorbacknum[i] = (UINT8)players[i].colorbacksel;
+		netbuffer->u.servercfg.colortopnum[i] = (UINT8)players[i].colortopsel;
 		netbuffer->u.servercfg.playeravailabilities[i] = (UINT32)LONG(players[i].availabilities);
 		netbuffer->u.servercfg.playerequipmentavail[i] = (INT32)SHORT(players[i].equipmentavail);
 	}
@@ -3076,25 +3088,6 @@ consvar_t cv_noticedownload = {"noticedownload", "Off", CV_SAVE, CV_OnOff, NULL,
 static CV_PossibleValue_t downloadspeed_cons_t[] = {{0, "MIN"}, {32, "MAX"}, {0, NULL}};
 consvar_t cv_downloadspeed = {"downloadspeed", "16", CV_SAVE, downloadspeed_cons_t, NULL, 0, NULL, NULL, 0, 0, NULL};
 
-// Backnum
-static CV_PossibleValue_t backnum_cons_t[] = {{1, "MIN"}, {10, "MAX"}, {0, NULL}};
-consvar_t cv_backnum = {"backnum", "2", CV_SAVE, backnum_cons_t, NULL, 0, NULL, NULL, 0, 0, NULL};
-
-// Topnum
-static CV_PossibleValue_t topnum_cons_t[] = {{1, "MIN"}, {10, "MAX"}, {0, NULL}};
-consvar_t cv_topnum = {"topnum", "1", CV_SAVE, topnum_cons_t, NULL, 0, NULL, NULL, 0, 0, NULL};
-
-//snprintf(bluecolor, 12, "%d", SKINCOLOR_BLUE);        sigh
-//snprintf(blackcolor, 12, "%d", SKINCOLOR_BLACK);
-
-// Colorbacknum
-static CV_PossibleValue_t colorbacknum_cons_t[] = {{1, "MIN"}, {MAXSKINCOLORS, "MAX"}, {0, NULL}};
-consvar_t cv_colorbacknum = {"colorbacknum", "55", CV_SAVE, colorbacknum_cons_t, NULL, 0, NULL, NULL, 0, 0, NULL};
-
-// Colortopnum
-static CV_PossibleValue_t colortopnum_cons_t[] = {{1, "MIN"}, {MAXSKINCOLORS, "MAX"}, {0, NULL}};
-consvar_t cv_colortopnum = {"colortopnum", "8", CV_SAVE, colortopnum_cons_t, NULL, 0, NULL, NULL, 0, 0, NULL};
-
 static void Got_AddPlayer(UINT8 **p, INT32 playernum);
 
 // called one time at init
@@ -3899,6 +3892,10 @@ static void HandlePacketFromAwayNode(SINT8 node)
 			{
 				if (netbuffer->u.servercfg.playerskins[j] == 0xFF
 				 && netbuffer->u.servercfg.playercolor[j] == 0xFF
+				 && netbuffer->u.servercfg.backnum[j] == 0xFF
+				 && netbuffer->u.servercfg.topnum[j] == 0xFF
+				 && netbuffer->u.servercfg.colorbacknum[j] == 0xFF
+				 && netbuffer->u.servercfg.colortopnum[j] == 0xFF
 				 && netbuffer->u.servercfg.playeravailabilities[j] == 0xFFFFFFFF)
 				 //&& netbuffer->u.servercfg.playerequipmentavail[j] == 0xFFFFFFFF)
 					continue; // not in game
@@ -3908,6 +3905,10 @@ static void HandlePacketFromAwayNode(SINT8 node)
 				players[j].equipmentavail = (INT32)SHORT(netbuffer->u.servercfg.playerequipmentavail[j]);
 				SetPlayerSkinByNum(j, (INT32)netbuffer->u.servercfg.playerskins[j]);
 				players[j].skincolor = netbuffer->u.servercfg.playercolor[j];
+				players[j].backsel = netbuffer->u.servercfg.backnum[j];
+				players[j].topsel = netbuffer->u.servercfg.topnum[j];
+				players[j].colorbacksel = netbuffer->u.servercfg.colorbacknum[j];
+				players[j].colortopsel = netbuffer->u.servercfg.colortopnum[j];
 			}
 
 			scp = netbuffer->u.servercfg.varlengthinputs;

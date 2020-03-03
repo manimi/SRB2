@@ -114,6 +114,9 @@ extern consvar_t cv_skipmapcheck;
 
 extern consvar_t cv_sleep;
 
+extern consvar_t cv_backnum, cv_colorbacknum;
+extern consvar_t cv_topnum, cv_colortopnum;
+
 extern char timedemo_name[256];
 extern boolean timedemo_csv;
 extern char timedemo_csv_id[256];
@@ -146,6 +149,7 @@ typedef enum
 	XD_LUACMD,      // 22
 	XD_LUAVAR,      // 23
 #endif
+	XD_EQUIPMENT,  // 24
 	MAXNETXCMD
 } netxcmd_t;
 

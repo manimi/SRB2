@@ -317,6 +317,10 @@ typedef struct
 	// 0xFF == not in game; else player skin num
 	UINT8 playerskins[MAXPLAYERS];
 	UINT8 playercolor[MAXPLAYERS];
+	UINT8 backnum[MAXPLAYERS];
+	UINT8 topnum[MAXPLAYERS];
+	UINT8 colorbacknum[MAXPLAYERS];
+	UINT8 colortopnum[MAXPLAYERS];
 	UINT32 playeravailabilities[MAXPLAYERS];
 	INT32 playerequipmentavail[MAXPLAYERS];
 
@@ -412,6 +416,10 @@ typedef struct
 	UINT8 address[4]; // sending another string would run us up against MAXPACKETLENGTH
 	UINT8 team;
 	UINT8 skin;
+	UINT8 backnum;
+	UINT8 topnum;
+	UINT8 colorbacknum;
+	UINT8 colortopnum;
 	UINT8 data; // Color is first four bits, hasflag, isit and issuper have one bit each, the last is unused.
 	UINT32 score;
 	UINT16 timeinserver; // In seconds.
@@ -526,8 +534,6 @@ extern tic_t servermaxping;
 extern consvar_t cv_allownewplayer, cv_joinnextround, cv_maxplayers, cv_rejointimeout;
 extern consvar_t cv_resynchattempts, cv_blamecfail;
 extern consvar_t cv_maxsend, cv_noticedownload, cv_downloadspeed;
-extern consvar_t cv_backnum, cv_colorbacknum;
-extern consvar_t cv_topnum, cv_colortopnum;
 
 // Used in d_net, the only dependence
 tic_t ExpandTics(INT32 low);

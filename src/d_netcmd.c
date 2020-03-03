@@ -59,6 +59,7 @@
 // ------
 
 static void Got_NameAndColor(UINT8 **cp, INT32 playernum);
+static void Got_Equipment(UINT8 **cp, INT32 playernum);
 static void Got_WeaponPref(UINT8 **cp, INT32 playernum);
 static void Got_Mapcmd(UINT8 **cp, INT32 playernum);
 static void Got_ExitLevelcmd(UINT8 **cp, INT32 playernum);
@@ -99,6 +100,7 @@ static void Skin_OnChange(void);
 static void Skin2_OnChange(void);
 static void Color_OnChange(void);
 static void Color2_OnChange(void);
+static void Equipment_OnChange(void);
 static void DummyConsvar_OnChange(void);
 static void SoundTest_OnChange(void);
 
@@ -379,6 +381,22 @@ consvar_t cv_mute = {"mute", "Off", CV_NETVAR|CV_CALL, CV_OnOff, Mute_OnChange, 
 
 consvar_t cv_sleep = {"cpusleep", "1", CV_SAVE, sleeping_cons_t, NULL, -1, NULL, NULL, 0, 0, NULL};
 
+// Backnum
+static CV_PossibleValue_t backnum_cons_t[] = {{1, "MIN"}, {10, "MAX"}, {0, NULL}};
+consvar_t cv_backnum = {"backnum", "2", CV_CALL|CV_NOINIT|CV_SAVE, backnum_cons_t, Equipment_OnChange, 0, NULL, NULL, 0, 0, NULL};
+
+// Topnum
+static CV_PossibleValue_t topnum_cons_t[] = {{1, "MIN"}, {10, "MAX"}, {0, NULL}};
+consvar_t cv_topnum = {"topnum", "1", CV_CALL|CV_NOINIT|CV_SAVE, topnum_cons_t, Equipment_OnChange, 0, NULL, NULL, 0, 0, NULL};
+
+// Colorbacknum
+static CV_PossibleValue_t colorbacknum_cons_t[] = {{1, "MIN"}, {MAXSKINCOLORS, "MAX"}, {0, NULL}};
+consvar_t cv_colorbacknum = {"colorbacknum", "55", CV_CALL|CV_NOINIT|CV_SAVE, colorbacknum_cons_t, Equipment_OnChange, 0, NULL, NULL, 0, 0, NULL};
+
+// Colortopnum
+static CV_PossibleValue_t colortopnum_cons_t[] = {{1, "MIN"}, {MAXSKINCOLORS, "MAX"}, {0, NULL}};
+consvar_t cv_colortopnum = {"colortopnum", "8", CV_CALL|CV_NOINIT|CV_SAVE, colortopnum_cons_t, Equipment_OnChange, 0, NULL, NULL, 0, 0, NULL};
+
 char timedemo_name[256];
 boolean timedemo_csv;
 char timedemo_csv_id[256];
@@ -443,6 +461,7 @@ void D_RegisterServerCommands(void)
 	gametype_cons_t[NUMGAMETYPES].strvalue = NULL;
 
 	RegisterNetXCmd(XD_NAMEANDCOLOR, Got_NameAndColor);
+	RegisterNetXCmd(XD_EQUIPMENT, Got_Equipment);
 	RegisterNetXCmd(XD_WEAPONPREF, Got_WeaponPref);
 	RegisterNetXCmd(XD_MAP, Got_Mapcmd);
 	RegisterNetXCmd(XD_EXITLEVEL, Got_ExitLevelcmd);
@@ -584,10 +603,6 @@ void D_RegisterServerCommands(void)
 	CV_RegisterVar(&cv_maxsend);
 	CV_RegisterVar(&cv_noticedownload);
 	CV_RegisterVar(&cv_downloadspeed);
-	CV_RegisterVar(&cv_backnum);
-	CV_RegisterVar(&cv_topnum);
-	CV_RegisterVar(&cv_colorbacknum);
-	CV_RegisterVar(&cv_colortopnum);
 #ifndef NONET
 	CV_RegisterVar(&cv_allownewplayer);
 	CV_RegisterVar(&cv_joinnextround);
@@ -690,6 +705,10 @@ void D_RegisterClientCommands(void)
 	// register these so it is saved to config
 	CV_RegisterVar(&cv_playername);
 	CV_RegisterVar(&cv_playercolor);
+	CV_RegisterVar(&cv_backnum);
+	CV_RegisterVar(&cv_topnum);
+	CV_RegisterVar(&cv_colorbacknum);
+	CV_RegisterVar(&cv_colortopnum);
 	CV_RegisterVar(&cv_skin); // r_things.c (skin NAME)
 	// secondary player (splitscreen)
 	CV_RegisterVar(&cv_playername2);
@@ -931,7 +950,7 @@ void D_RegisterClientCommands(void)
   * \param name      Name to check.
   * \param playernum Player who wants the name, so we can check if they already
   *                  have it, and let them keep it if so.
-  * \sa CleanupPlayerName, SetPlayerName, Got_NameAndColor
+  * \sa CleanupPlayerName, SetPlayerName, Got_NameAndColor, Got_Equipment
   * \author Graue <graue@oceanbase.org>
   */
 boolean EnsurePlayerNameIsGood(char *name, INT32 playernum)
@@ -1009,7 +1028,7 @@ boolean EnsurePlayerNameIsGood(char *name, INT32 playernum)
   * \param newname   New name for that player; should already be in
   *                  ::cv_playername or ::cv_playername2 if player is the
   *                  console or secondary display player, respectively.
-  * \sa cv_playername, cv_playername2, SendNameAndColor, SendNameAndColor2,
+  * \sa cv_playername, cv_playername2, SendNameAndColor, SendNameAndColor2, SendEquipment
   *     SetPlayerName
   * \author Graue <graue@oceanbase.org>
   */
@@ -1435,6 +1454,84 @@ static void SendNameAndColor2(void)
 	// Don't actually send anything because splitscreen isn't actually allowed in netgames anyway!
 }
 
+// equipment has changed
+//
+static void SendEquipment(void)
+{
+	char buf[MAXPLAYERNAME+6];
+	char *p;
+
+	p = buf;
+
+	if (!cv_backnum.value)
+	{
+		if (players[consoleplayer].backsel)
+			CV_StealthSetValue(&cv_backnum, players[consoleplayer].backsel);
+		else
+			CV_StealthSet(&cv_backnum, cv_backnum.defaultvalue);
+	}
+
+	if (!cv_topnum.value)
+	{
+		if (players[consoleplayer].topsel)
+			CV_StealthSetValue(&cv_topnum, players[consoleplayer].topsel);
+		else
+			CV_StealthSet(&cv_topnum, cv_topnum.defaultvalue);
+	}
+
+	if (!cv_colorbacknum.value)
+	{
+		if (players[consoleplayer].colorbacksel)
+			CV_StealthSetValue(&cv_colorbacknum, players[consoleplayer].colorbacksel);
+		else
+			CV_StealthSet(&cv_colorbacknum, cv_colorbacknum.defaultvalue);
+	}
+
+	if (!cv_colortopnum.value)
+	{
+		if (players[consoleplayer].colortopsel)
+			CV_StealthSetValue(&cv_colortopnum, players[consoleplayer].colortopsel);
+		else
+			CV_StealthSet(&cv_colortopnum, cv_colortopnum.defaultvalue);
+	}
+
+	if (cv_backnum.value == players[consoleplayer].backsel)
+		return;
+
+	if (cv_topnum.value == players[consoleplayer].topsel)
+		return;
+
+	if (cv_colorbacknum.value == players[consoleplayer].colorbacksel)
+		return;
+
+	if (cv_colortopnum.value == players[consoleplayer].colortopsel)
+		return;
+
+	// We'll handle it later if we're not playing.
+	if (!Playing())
+		return;
+
+	// If you're not in a netgame, merely update the skin, color, and name.
+	if (!netgame)
+	{
+		players[consoleplayer].backsel = cv_backnum.value;
+		players[consoleplayer].topsel = cv_topnum.value;
+		players[consoleplayer].colorbacksel = cv_colorbacknum.value;
+		players[consoleplayer].colortopsel = cv_colortopnum.value;
+
+		return;
+	}
+
+	snacpending++;
+
+	// Finally write out the complete packet and send it off.
+	WRITEUINT8(p, (UINT8)cv_backnum.value);
+	WRITEUINT8(p, (UINT8)cv_topnum.value);
+	WRITEUINT8(p, (UINT8)cv_colorbacknum.value);
+	WRITEUINT8(p, (UINT8)cv_colortopnum.value);
+	SendNetXCmd(XD_EQUIPMENT, buf, p - buf);
+}
+
 static void Got_NameAndColor(UINT8 **cp, INT32 playernum)
 {
 	player_t *p = &players[playernum];
@@ -1523,6 +1620,64 @@ static void Got_NameAndColor(UINT8 **cp, INT32 playernum)
 		SetPlayerSkinByNum(playernum, skin);
 }
 
+static void Got_Equipment(UINT8 **cp, INT32 playernum)
+{
+	player_t *p = &players[playernum];
+	UINT8 backnum, topnum, colorbacknum, colortopnum;
+
+#ifdef PARANOIA
+	if (playernum < 0 || playernum > MAXPLAYERS)
+		I_Error("There is no player %d!", playernum);
+#endif
+
+	if (playernum == consoleplayer)
+		snacpending--;
+	else if (playernum == secondarydisplayplayer)
+		snac2pending--;
+
+#ifdef PARANOIA
+	if (snacpending < 0 || snac2pending < 0)
+		I_Error("snacpending negative!");
+#endif
+
+	backnum = READUINT8(*cp);
+	topnum = READUINT8(*cp);
+	colorbacknum = READUINT8(*cp);
+	colortopnum = READUINT8(*cp);
+
+	// set
+	p->backsel = backnum;
+	p->topsel = topnum;
+	p->colorbacksel = colorbacknum;
+	p->colortopsel = colortopnum;
+	
+	// normal player colors
+	if (server && (p != &players[consoleplayer] && p != &players[secondarydisplayplayer]))
+	{
+		boolean kick = false;
+
+		// don't allow nothing
+		if (!p->backsel)
+			kick = true;
+	
+		if (!p->topsel)
+			kick = true;
+
+		if (!p->colorbacksel)
+			kick = true;
+
+		if (!p->colortopsel)
+			kick = true;
+
+		if (kick)
+		{
+			CONS_Alert(CONS_WARNING, M_GetText("Illegal equipment change has been received.\n"));
+			SendKick(playernum, KICK_MSG_CON_FAIL | KICK_MSG_KEEP_BODY);
+			return;
+		}
+	}
+}
+
 void SendWeaponPref(void)
 {
 	UINT8 buf[1];
@@ -1575,6 +1730,7 @@ void D_SendPlayerConfig(void)
 	SendNameAndColor();
 	if (splitscreen || botingame)
 		SendNameAndColor2();
+	SendEquipment();
 	SendWeaponPref();
 	if (splitscreen)
 		SendWeaponPref2();
@@ -4523,7 +4679,7 @@ static void Color_OnChange(void)
 
 /** Sends a color change for the secondary splitscreen player, unless that
   * player is moving.
-  * \sa cv_playercolor2, Color_OnChange, Skin2_OnChange
+  * \sa cv_backnum, cv_topnum, cv_colorbacknum, cv_colortopnum, cv_playercolor2, Color_OnChange, Equipment_OnChange, Skin2_OnChange
   * \author Graue <graue@oceanbase.org>
   */
 static void Color2_OnChange(void)
@@ -4540,6 +4696,31 @@ static void Color2_OnChange(void)
 	{
 		CV_StealthSetValue(&cv_playercolor2,
 			players[secondarydisplayplayer].skincolor);
+	}
+}
+
+static void Equipment_OnChange(void)
+{
+	if (!Playing())
+		return; // do whatever you want
+
+	if (!(cv_debug || devparm) && !(multiplayer || netgame)) // In single player.
+	{
+		CV_StealthSet(&cv_skin, skins[players[consoleplayer].skin].name);
+		return;
+	}
+
+	if (!P_PlayerMoving(consoleplayer))
+	{
+		// Equipment change menu scrolling fix is no longer necessary
+		SendEquipment();
+	}
+	else
+	{
+		CV_StealthSetValue(&cv_backnum, players[consoleplayer].backsel);
+		CV_StealthSetValue(&cv_topnum, players[consoleplayer].topsel);
+		CV_StealthSetValue(&cv_colorbacknum, players[consoleplayer].colorbacksel);
+		CV_StealthSetValue(&cv_colortopnum, players[consoleplayer].colortopsel);
 	}
 }
 

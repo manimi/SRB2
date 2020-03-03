@@ -2629,10 +2629,10 @@ void G_PlayerReborn(INT32 player, boolean betweenmaps)
 
 	// Check to make sure their color didn't change somehow...
 
-	p->backsel = cv_backnum.value;
-	p->topsel = cv_topnum.value;
-	p->colorbacksel = cv_colorbacknum.value;
-	p->colortopsel = cv_colortopnum.value;
+	//p->backsel = cv_backnum.value;
+	//p->topsel = cv_topnum.value;
+	//p->colorbacksel = cv_colorbacknum.value;
+	//p->colortopsel = cv_colortopnum.value;
 
 	if (G_GametypeHasTeams())
 	{
@@ -2729,17 +2729,17 @@ static boolean G_CheckSpot(INT32 playernum, mapthing_t *mthing)
 //
 void G_SpawnPlayer(INT32 playernum)
 {
-	player_t *player = &players[playernum];
+	//player_t *player = &players[playernum];
 
 	if (!playeringame[playernum])
 		return;
 
 	P_SpawnPlayer(playernum);
 	G_MovePlayerToSpawnOrStarpost(playernum);
-	player->backsel = cv_backnum.value;
-	player->colorbacksel = cv_colorbacknum.value;
-	player->topsel = cv_topnum.value;
-	player->colortopsel = cv_colortopnum.value;
+	//player->backsel = cv_backnum.value;
+	//player->colorbacksel = cv_colorbacknum.value;
+	//player->topsel = cv_topnum.value;
+	//player->colortopsel = cv_colortopnum.value;
 #ifdef HAVE_BLUA
 	LUAh_PlayerSpawn(&players[playernum]); // Lua hook for player spawning :)
 #endif
