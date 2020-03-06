@@ -951,6 +951,9 @@ static void IdentifyVersion(void)
 	// Add the core pk3
 	D_AddFile(va(pandf,srb2waddir,"di_main.pk3"));
 
+	// Add the skins pk3
+	D_AddFile(va(pandf,srb2waddir,"di_skins.pk3"));
+
 #if !defined (HAVE_SDL) || defined (HAVE_MIXER)
 	{
 #define MUSICTEST(str) \

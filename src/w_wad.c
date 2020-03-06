@@ -1888,6 +1888,9 @@ int W_VerifyNMUSlumps(const char *filename)
 {
 if (strcmpi(filename, "di_main.pk3") == 0)
     return 1;
+
+if (strcmpi(filename, "di_skins.pk3") == 0)
+    return 1;
 	// MIDI, MOD/S3M/IT/XM/OGG/MP3/WAV, WAVE SFX
 	// ENDOOM text and palette lumps
 	lumpchecklist_t NMUSlist[] =
