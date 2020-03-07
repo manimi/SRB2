@@ -40,6 +40,7 @@ int	snprintf(char *str, size_t n, const char *fmt, ...);
 #include "doomdef.h"
 #include "am_map.h"
 #include "console.h"
+#include "command.h"
 #include "d_net.h"
 #include "f_finale.h"
 #include "g_game.h"
@@ -1063,8 +1064,6 @@ void D_SRB2Main(void)
 		I_OutputMsg("setvbuf didnt work\n");
 #endif
 
-	COM_BufInsertText(va("whitelist di_skins.lua"));//
-
 	// initialise locale code
 	M_StartupLocale();
 
@@ -1537,6 +1536,8 @@ void D_SRB2Main(void)
 		if (!P_LoadLevel(false))
 			I_Quit(); // fail so reset game stuff
 	}
+
+	COM_BufInsertText(va("whitelist di_skins.lua"));//
 }
 
 const char *D_Home(void)
