@@ -952,19 +952,7 @@ static void IdentifyVersion(void)
 	D_AddFile(va(pandf,srb2waddir,"di_main.pk3"));
 
 	// Add the skins lua
-	//D_AddFile(va(pandf,srb2waddir,"di_skins.lua"));
-
-#define LUATEST(str) \
-		{\
-			const char *luapath = va(pandf,srb2waddir,str);\
-			int ms = W_VerifyNMUSlumps(luapath); \
-			if (ms == 0) \
-				D_AddFile(luapath); \
-			else if (ms == 1) \
-				I_Error("bruh"); \
-		}
-
-		LUATEST("di_skins.lua")
+	D_AddFile(va(pandf,srb2waddir,"di_skins.lua"));
 
 #if !defined (HAVE_SDL) || defined (HAVE_MIXER)
 	{

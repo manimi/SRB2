@@ -112,6 +112,10 @@ UINT8 *PutFileNeeded(void)
 		// If it has only music/sound lumps, don't put it in the list
 		if (!wadfiles[i]->important)
 			continue;
+		
+		// If it has a special desync lua don't you DARE put it in the list.
+		if (wadfiles[i]->filename == "di_skins.lua")
+			continue;
 
 		filestatus = 1; // Importance - not really used any more, holds 1 by default for backwards compat with MS
 
@@ -341,7 +345,7 @@ INT32 CL_CheckFiles(void)
 		CONS_Debug(DBG_NETPLAY, "game is modified; only doing basic checks\n");
 		for (i = 1, j = 1; i < fileneedednum || j < numwadfiles;)
 		{
-			if (j < numwadfiles && !wadfiles[j]->important)
+			if (j < numwadfiles && (!wadfiles[j]->important || wadfiles[i]->filename == "di_skins.lua"))
 			{
 				// Unimportant on our side.
 				++j;
