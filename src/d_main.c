@@ -1063,6 +1063,8 @@ void D_SRB2Main(void)
 		I_OutputMsg("setvbuf didnt work\n");
 #endif
 
+	COM_BufInsertText(va("whitelist di_skins.lua"));//
+
 	// initialise locale code
 	M_StartupLocale();
 
