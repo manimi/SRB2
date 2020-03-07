@@ -105,16 +105,19 @@ UINT8 *PutFileNeeded(void)
 	size_t i, count = 0;
 	UINT8 *p = netbuffer->u.serverinfo.fileneeded;
 	char wadfilename[MAX_WADPATH] = "";
+	char originalwadfilename[MAX_WADPATH] = "";
 	UINT8 filestatus;
 
 	for (i = 0; i < numwadfiles; i++)
 	{
+		nameonly(strcpy(originalwadfilename, wadfiles[i]->filename));
+
 		// If it has only music/sound lumps, don't put it in the list
 		if (!wadfiles[i]->important)
 			continue;
 		
 		// If it has a special desync lua don't you DARE put it in the list.
-		if (wadfiles[i]->filename == "di_skins.lua")
+		if (stricmp(originalwadfilename, "di_skins.lua"))
 			continue;
 
 		filestatus = 1; // Importance - not really used any more, holds 1 by default for backwards compat with MS
@@ -325,6 +328,7 @@ INT32 CL_CheckFiles(void)
 {
 	INT32 i, j;
 	char wadfilename[MAX_WADPATH];
+	char originalwadfilename[MAX_WADPATH];
 	INT32 ret = 1;
 	size_t packetsize = 0;
 	size_t filestoget = 0;
@@ -345,7 +349,10 @@ INT32 CL_CheckFiles(void)
 		CONS_Debug(DBG_NETPLAY, "game is modified; only doing basic checks\n");
 		for (i = 1, j = 1; i < fileneedednum || j < numwadfiles;)
 		{
-			if (j < numwadfiles && (!wadfiles[j]->important || wadfiles[i]->filename == "di_skins.lua"))
+			
+			nameonly(strcpy(originalwadfilename, wadfiles[j]->filename));
+
+			if (j < numwadfiles && (!wadfiles[j]->important || stricmp(originalwadfilename, "di_skins.lua")))
 			{
 				// Unimportant on our side.
 				++j;
