@@ -951,8 +951,8 @@ static void IdentifyVersion(void)
 	// Add the core pk3
 	D_AddFile(va(pandf,srb2waddir,"di_main.pk3"));
 
-	// Add the skins pk3
-	D_AddFile(va(pandf,srb2waddir,"di_skins.pk3"));
+	// Add the skins lua
+	//D_AddFile(va(pandf,srb2waddir,"di_skins.lua"));
 
 #if !defined (HAVE_SDL) || defined (HAVE_MIXER)
 	{
@@ -966,6 +966,7 @@ static void IdentifyVersion(void)
 				I_Error("File "str" has been modified with non-music/sound lumps"); \
 		}
 
+		MUSICTEST("di_skins.lua") //I'm sorry! I want it to be independent lua so players won't need to have the same version!
 		MUSICTEST("music.dta")
 		MUSICTEST("di_music.dta")
 #ifdef DEVELOP // remove when music_new.dta is merged into music.dta
