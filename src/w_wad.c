@@ -1884,17 +1884,33 @@ static int W_VerifyFile(const char *filename, lumpchecklist_t *checklist,
   *         file exists with that filename
   * \author Alam Arias
   */
+extern char whitelist[128][256];    // Max filename length 128, max # of wads 256
+extern int whitelist_num;
 int W_VerifyNMUSlumps(const char *filename)
 {
-if (strcmpi(filename, "di_main.pk3") == 0)
-    return 1;
-
-if (strcmpi(filename, "di_skins.lua") == 0)
-    return 1;
-	// MIDI, MOD/S3M/IT/XM/OGG/MP3/WAV, WAVE SFX
-	// ENDOOM text and palette lumps
-	lumpchecklist_t NMUSlist[] =
-	{
+    //Try both forward and backward slashes
+    char *slash1 = strrchr(filename, '/');
+    char *slash2 = strrchr(filename, '\\');
+    int result = 0;
+    for (int n=0; n<whitelist_num; n++) {
+        char slash1c[129];
+        strcpy(slash1c, "/");
+        strcat(slash1c, whitelist[n]);
+        if (slash1 && !strcmpi(slash1, slash1c))
+            return 1;
+        
+        char slash2c[129];
+        strcpy(slash2c, "\\");
+        strcat(slash2c, whitelist[n]);
+        if (slash2 && !strcmpi(slash2, slash2c))
+            return 1;
+        
+        else if (!strcmpi(filename, whitelist[n]))
+            return 1;
+    }
+    
+    lumpchecklist_t NMUSlist[] =
+    {
 		{"D_", 2}, // MIDI music
 		{"O_", 2}, // Digital music
 		{"DS", 2}, // Sound effects
