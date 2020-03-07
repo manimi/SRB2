@@ -954,6 +954,18 @@ static void IdentifyVersion(void)
 	// Add the skins lua
 	//D_AddFile(va(pandf,srb2waddir,"di_skins.lua"));
 
+#define LUATEST(str) \
+		{\
+			const char *luapath = va(pandf,srb2waddir,str);\
+			int ms = W_VerifyNMUSlumps(luapath); \
+			if (ms == 0) \
+				D_AddFile(luapath); \
+			else if (ms == 1) \
+				I_Error("bruh"); \
+		}
+
+		LUATEST("di_skins.lua")
+
 #if !defined (HAVE_SDL) || defined (HAVE_MIXER)
 	{
 #define MUSICTEST(str) \
@@ -966,7 +978,6 @@ static void IdentifyVersion(void)
 				I_Error("File "str" has been modified with non-music/sound lumps"); \
 		}
 
-		MUSICTEST("di_skins.lua") //I'm sorry! I want it to be independent lua so players won't need to have the same version!
 		MUSICTEST("music.dta")
 		MUSICTEST("di_music.dta")
 #ifdef DEVELOP // remove when music_new.dta is merged into music.dta
