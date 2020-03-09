@@ -70,7 +70,7 @@ static inline void P_ArchivePlayer(void)
 	INT16 skininfo = player->skin + (botskin<<5);
 	SINT8 pllives = player->lives;
 
-	UINT8 skincolor = player->skincolor;
+	//UINT8 skincolor = player->skincolor;
 
 	UINT8 backsel = player->backsel;
 	UINT8 topsel = player->topsel;
@@ -86,7 +86,7 @@ static inline void P_ArchivePlayer(void)
 	WRITEUINT32(save_p, player->score);
 	WRITEINT32(save_p, player->continues);
 
-	WRITEUINT8(save_p, skincolor);
+	//WRITEUINT8(save_p, skincolor);
 
 	WRITEUINT8(save_p, backsel);
 	WRITEUINT8(save_p, topsel);
@@ -108,7 +108,7 @@ static inline void P_UnArchivePlayer(void)
 	savedata.score = READUINT32(save_p);
 	savedata.continues = READINT32(save_p);
 
-	savedata.skincolor = READUINT8(save_p);
+	//savedata.skincolor = READUINT8(save_p);
 
 	savedata.backsel = READUINT8(save_p);
 	savedata.topsel = READUINT8(save_p);

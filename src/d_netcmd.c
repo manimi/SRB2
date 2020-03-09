@@ -385,26 +385,26 @@ consvar_t cv_sleep = {"cpusleep", "1", CV_SAVE, sleeping_cons_t, NULL, -1, NULL,
 // Backnum
 static CV_PossibleValue_t backnum_cons_t[] = {{1, "MIN"}, {10, "MAX"}, {0, NULL}};
 consvar_t cv_backnum = {"backnum", "2", CV_CALL|CV_NOINIT|CV_SAVE, backnum_cons_t, Equipment_OnChange, 0, NULL, NULL, 0, 0, NULL};
-static CV_PossibleValue_t sbacknum_cons_t[] = {{1, "MIN"}, {10, "MAX"}, {0, NULL}};
-consvar_t cv_sbacknum = {"sbacknum", "2", CV_CALL|CV_NOINIT, sbacknum_cons_t, NULL, 0, NULL, NULL, 0, 0, NULL};
+//static CV_PossibleValue_t sbacknum_cons_t[] = {{1, "MIN"}, {10, "MAX"}, {0, NULL}};
+//consvar_t cv_sbacknum = {"sbacknum", "2", CV_CALL|CV_NOINIT, sbacknum_cons_t, NULL, 0, NULL, NULL, 0, 0, NULL};
 
 // Topnum
 static CV_PossibleValue_t topnum_cons_t[] = {{1, "MIN"}, {10, "MAX"}, {0, NULL}};
 consvar_t cv_topnum = {"topnum", "1", CV_CALL|CV_NOINIT|CV_SAVE, topnum_cons_t, Equipment_OnChange, 0, NULL, NULL, 0, 0, NULL};
-static CV_PossibleValue_t stopnum_cons_t[] = {{1, "MIN"}, {10, "MAX"}, {0, NULL}};
-consvar_t cv_stopnum = {"stopnum", "1", CV_CALL|CV_NOINIT, stopnum_cons_t, NULL, 0, NULL, NULL, 0, 0, NULL};
+//static CV_PossibleValue_t stopnum_cons_t[] = {{1, "MIN"}, {10, "MAX"}, {0, NULL}};
+//consvar_t cv_stopnum = {"stopnum", "1", CV_CALL|CV_NOINIT, stopnum_cons_t, NULL, 0, NULL, NULL, 0, 0, NULL};
 
 // Colorbacknum
 static CV_PossibleValue_t colorbacknum_cons_t[] = {{1, "MIN"}, {MAXSKINCOLORS, "MAX"}, {0, NULL}};
 consvar_t cv_colorbacknum = {"colorbacknum", "55", CV_CALL|CV_NOINIT|CV_SAVE, colorbacknum_cons_t, Equipment_OnChange, 0, NULL, NULL, 0, 0, NULL};
-static CV_PossibleValue_t colorsbacknum_cons_t[] = {{1, "MIN"}, {MAXSKINCOLORS, "MAX"}, {0, NULL}};
-consvar_t cv_colorsbacknum = {"colorsbacknum", "55", CV_CALL|CV_NOINIT, colorsbacknum_cons_t, NULL, 0, NULL, NULL, 0, 0, NULL};
+//static CV_PossibleValue_t colorsbacknum_cons_t[] = {{1, "MIN"}, {MAXSKINCOLORS, "MAX"}, {0, NULL}};
+//consvar_t cv_colorsbacknum = {"colorsbacknum", "55", CV_CALL|CV_NOINIT, colorsbacknum_cons_t, NULL, 0, NULL, NULL, 0, 0, NULL};
 
 // Colortopnum
 static CV_PossibleValue_t colortopnum_cons_t[] = {{1, "MIN"}, {MAXSKINCOLORS, "MAX"}, {0, NULL}};
 consvar_t cv_colortopnum = {"colortopnum", "8", CV_CALL|CV_NOINIT|CV_SAVE, colortopnum_cons_t, Equipment_OnChange, 0, NULL, NULL, 0, 0, NULL};
-static CV_PossibleValue_t colorstopnum_cons_t[] = {{1, "MIN"}, {MAXSKINCOLORS, "MAX"}, {0, NULL}};
-consvar_t cv_colorstopnum = {"colorstopnum", "8", CV_CALL|CV_NOINIT, colorstopnum_cons_t, NULL, 0, NULL, NULL, 0, 0, NULL};
+//static CV_PossibleValue_t colorstopnum_cons_t[] = {{1, "MIN"}, {MAXSKINCOLORS, "MAX"}, {0, NULL}};
+//consvar_t cv_colorstopnum = {"colorstopnum", "8", CV_CALL|CV_NOINIT, colorstopnum_cons_t, NULL, 0, NULL, NULL, 0, 0, NULL};
 
 char timedemo_name[256];
 boolean timedemo_csv;
@@ -719,10 +719,10 @@ void D_RegisterClientCommands(void)
 	CV_RegisterVar(&cv_topnum);
 	CV_RegisterVar(&cv_colorbacknum);
 	CV_RegisterVar(&cv_colortopnum);
-	CV_RegisterVar(&cv_sbacknum);
-	CV_RegisterVar(&cv_stopnum);
-	CV_RegisterVar(&cv_colorsbacknum);
-	CV_RegisterVar(&cv_colorstopnum);
+	//CV_RegisterVar(&cv_sbacknum);
+	//CV_RegisterVar(&cv_stopnum);
+	//CV_RegisterVar(&cv_colorsbacknum);
+	//CV_RegisterVar(&cv_colorstopnum);
 	CV_RegisterVar(&cv_skin); // r_things.c (skin NAME)
 	// secondary player (splitscreen)
 	CV_RegisterVar(&cv_playername2);
@@ -1528,10 +1528,10 @@ static void SendEquipment(void)
 	// If you're not in a netgame, merely update the skin, color, and name.
 	if (!netgame)
 	{
-		//players[consoleplayer].backsel = cv_backnum.value;
-		//players[consoleplayer].topsel = cv_topnum.value;
-		//players[consoleplayer].colorbacksel = cv_colorbacknum.value;
-		//players[consoleplayer].colortopsel = cv_colortopnum.value;
+		players[consoleplayer].backsel = cv_backnum.value;
+		players[consoleplayer].topsel = cv_topnum.value;
+		players[consoleplayer].colorbacksel = cv_colorbacknum.value;
+		players[consoleplayer].colortopsel = cv_colortopnum.value;
 
 		return;
 	}

@@ -38,7 +38,7 @@ typedef struct
 	UINT16 emeralds;
 	UINT8 numgameovers;
 
-	UINT8 skincolor;
+	//UINT8 skincolor;
 
 	UINT8 backsel;
 	UINT8 topsel;

@@ -8270,7 +8270,7 @@ skipbot:
 			if (!charskin) // shut up compiler
 				goto skipsign;
 			sprdef = &charskin->sprites[SPR2_SIGN];
-			colormap = R_GetTranslationColormap(savegameinfo[savetodraw].skinnum, savegameinfo[savetodraw].skincolor, 0);
+			colormap = R_GetTranslationColormap(savegameinfo[savetodraw].skinnum, charskin->prefcolor, 0);
 			if (!sprdef->numframes)
 				goto skipsign;
 			sprframe = &sprdef->spriteframes[0];
@@ -8469,8 +8469,8 @@ static void M_ReadSavegameInfo(UINT32 slot)
 	(void)READINT32(save_p); // Score
 	CHECKPOS
 	savegameinfo[slot].continues = READINT32(save_p); // continues
-	CHECKPOS
-	savegameinfo[slot].skincolor = READUINT8(save_p); // skincolor
+	//CHECKPOS
+	//savegameinfo[slot].skincolor = READUINT8(save_p); // skincolor
 	//CHECKPOS
 	//savegameinfo[slot].backsel = READUINT8(save_p); // backsel
 	//CHECKPOS
