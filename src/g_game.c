@@ -1527,7 +1527,12 @@ void G_BuildTiccmd(ticcmd_t *cmd, INT32 realtics, UINT8 ssplayer)
 	// jump button
 	axis = PlayerJoyAxis(ssplayer, AXISJUMP);
 	if (PLAYERINPUTDOWN(ssplayer, gc_jump) || (usejoystick && axis > 0))
+	{
 		cmd->buttons |= BT_JUMP;
+		player->jumphold = true;
+	} else {
+		player->jumphold = false;
+	}
 
 	// player aiming shit, ahhhh...
 	{
@@ -2455,11 +2460,12 @@ void G_PlayerReborn(INT32 player, boolean betweenmaps)
 	SINT8 pity;
 	INT16 rings;
 	INT16 spheres;
-	boolean dimenu;
+	//boolean dimenu;
 	boolean forward;
 	boolean backward;
 	boolean left;
 	boolean right;
+	boolean jumphold;
 	UINT8 backsel;
 	UINT8 topsel;
 	UINT8 colorbacksel;
@@ -2473,11 +2479,12 @@ void G_PlayerReborn(INT32 player, boolean betweenmaps)
 	jointime = players[player].jointime;
 	quittime = players[player].quittime;
 	spectator = players[player].spectator;
-	dimenu = players[player].dimenu;
+	//dimenu = players[player].dimenu;
 	forward = players[player].forward;
 	backward = players[player].backward;
 	left = players[player].left;
 	right = players[player].right;
+	jumphold = players[player].jumphold;
 	outofcoop = players[player].outofcoop;
 	pflags = (players[player].pflags & (PF_FLIPCAM|PF_ANALOGMODE|PF_DIRECTIONCHAR|PF_AUTOBRAKE|PF_TAGIT|PF_GAMETYPEOVER));
 
@@ -2558,11 +2565,12 @@ void G_PlayerReborn(INT32 player, boolean betweenmaps)
 	p->quittime = quittime;
 	p->spectator = spectator;
 	p->outofcoop = outofcoop;
-	p->dimenu = dimenu;
+	//p->dimenu = dimenu;
 	p->forward = forward;
 	p->backward = backward;
 	p->left = left;
 	p->right = right;
+	p->jumphold = jumphold;
 
 	// save player config truth reborn
 	p->skincolor = skincolor;

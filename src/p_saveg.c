@@ -301,12 +301,11 @@ static void P_NetArchivePlayers(void)
 		WRITEFIXED(save_p, players[i].height);
 		WRITEFIXED(save_p, players[i].spinheight);
 
-		WRITEUINT8(save_p, players[i].dimenu);
-
 		WRITEUINT8(save_p, players[i].forward);
 		WRITEUINT8(save_p, players[i].backward);
 		WRITEUINT8(save_p, players[i].left);
 		WRITEUINT8(save_p, players[i].right);
+		WRITEUINT8(save_p, players[i].jumphold);
 
 		WRITEUINT8(save_p, players[i].backsel);
 		WRITEUINT8(save_p, players[i].topsel);
@@ -507,12 +506,11 @@ static void P_NetUnArchivePlayers(void)
 		players[i].height = READFIXED(save_p);
 		players[i].spinheight = READFIXED(save_p);
 
-		players[i].dimenu = (boolean)READUINT8(save_p);
-
 		players[i].forward = (boolean)READUINT8(save_p);
 		players[i].backward = (boolean)READUINT8(save_p);
 		players[i].left = (boolean)READUINT8(save_p);
 		players[i].right = (boolean)READUINT8(save_p);
+		players[i].jumphold = (boolean)READUINT8(save_p);
 
 		players[i].backsel = READUINT8(save_p);
 		players[i].topsel = READUINT8(save_p);

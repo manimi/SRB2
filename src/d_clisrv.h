@@ -298,7 +298,13 @@ typedef struct
 	fixed_t destscale;
 	fixed_t scalespeed;
 
-	UINT8 dimenu;
+	//UINT8 dimenu;
+
+	UINT8 forward;
+	UINT8 backward;
+	UINT8 left;
+	UINT8 right;
+	UINT8 jumphold;
 } ATTRPACK resynch_pak;
 
 typedef struct

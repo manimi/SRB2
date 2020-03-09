@@ -5877,7 +5877,7 @@ static void P_2dMovement(player_t *player)
 //////////////////////////////////////
 	if (player->climbing)
 	{
-		if (cmd->forwardmove != 0 && player->dimenu == false)
+		if (cmd->forwardmove != 0)
 			P_SetObjectMomZ(player->mo, FixedDiv(cmd->forwardmove*FRACUNIT, 15*FRACUNIT>>1), false);
 
 		player->mo->momx = 0;
@@ -5901,7 +5901,7 @@ static void P_2dMovement(player_t *player)
 		}
 
 		movepushforward = FixedMul(movepushforward, player->mo->scale);
-		if (player->rmomx < topspeed && cmd->sidemove > 0 && player->dimenu == false) // Sonic's Speed
+		if (player->rmomx < topspeed && cmd->sidemove > 0) // Sonic's Speed
 			P_Thrust(player->mo, movepushangle, movepushforward);
 		else if (player->rmomx > -topspeed && cmd->sidemove < 0)
 			P_Thrust(player->mo, movepushangle, movepushforward);
@@ -6094,7 +6094,7 @@ static void P_3dMovement(player_t *player)
 	}
 
 	// Forward movement
-	if (player->climbing && player->dimenu == false)
+	if (player->climbing)
 	{
 		if (cmd->forwardmove)
 		{
@@ -6131,12 +6131,11 @@ static void P_3dMovement(player_t *player)
 		totalthrust.x += P_ReturnThrustX(player->mo, movepushangle, movepushforward);
 		totalthrust.y += P_ReturnThrustY(player->mo, movepushangle, movepushforward);
 #else
-		if (player->dimenu == false)
-			P_Thrust(player->mo, movepushangle, movepushforward);
+		P_Thrust(player->mo, movepushangle, movepushforward);
 #endif
 	}
 	// Sideways movement
-	if (player->climbing && player->dimenu == false)
+	if (player->climbing)
 	{
 		if (player->mo->eflags & MFE_UNDERWATER)
 			P_InstaThrust(player->mo, player->mo->angle-ANGLE_90, FixedDiv(cmd->sidemove*player->mo->scale, 10*FRACUNIT));
@@ -6180,8 +6179,7 @@ static void P_3dMovement(player_t *player)
 			totalthrust.x += P_ReturnThrustX(player->mo, controldirection, movepushforward);
 			totalthrust.y += P_ReturnThrustY(player->mo, controldirection, movepushforward);
 #else
-			if (player->dimenu == false)
-				P_Thrust(player->mo, controldirection, movepushforward);
+			P_Thrust(player->mo, controldirection, movepushforward);
 #endif
 		}
 	}
@@ -6215,8 +6213,7 @@ static void P_3dMovement(player_t *player)
 		totalthrust.x += P_ReturnThrustX(player->mo, movepushsideangle, movepushside);
 		totalthrust.y += P_ReturnThrustY(player->mo, movepushsideangle, movepushside);
 #else
-		if (player->dimenu == false)
-			P_Thrust(player->mo, movepushsideangle, movepushside);
+		P_Thrust(player->mo, movepushsideangle, movepushside);
 #endif
 	}
 
@@ -6309,18 +6306,13 @@ static void P_SpectatorMovement(player_t *player)
 	player->mo->momx = player->mo->momy = player->mo->momz = 0;
 	if (cmd->forwardmove != 0)
 	{
-		if (player->dimenu == false)
-			P_Thrust(player->mo, player->mo->angle, cmd->forwardmove*(FRACUNIT/2));
+		P_Thrust(player->mo, player->mo->angle, cmd->forwardmove*(FRACUNIT/2));
 
 		// Quake-style flying spectators :D
-		if (player->dimenu == false)
-			player->mo->momz += FixedMul(cmd->forwardmove*(FRACUNIT/2), AIMINGTOSLOPE(player->aiming));
+		player->mo->momz += FixedMul(cmd->forwardmove*(FRACUNIT/2), AIMINGTOSLOPE(player->aiming));
 	}
 	if (cmd->sidemove != 0)
-	{
-		if (player->dimenu == false)
-			P_Thrust(player->mo, player->mo->angle-ANGLE_90, cmd->sidemove*(FRACUNIT/2));
-	}
+		P_Thrust(player->mo, player->mo->angle-ANGLE_90, cmd->sidemove*(FRACUNIT/2));
 }
 
 //
