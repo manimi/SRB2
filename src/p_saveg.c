@@ -72,10 +72,10 @@ static inline void P_ArchivePlayer(void)
 
 	//UINT8 skincolor = player->skincolor;
 
-	UINT8 backsel = player->backsel;
-	UINT8 topsel = player->topsel;
-	UINT8 colorbacksel = player->colorbacksel;
-	UINT8 colortopsel = player->colortopsel;
+	//UINT8 backsel = player->backsel;
+	//UINT8 topsel = player->topsel;
+	//UINT8 colorbacksel = player->colorbacksel;
+	//UINT8 colortopsel = player->colortopsel;
 
 	if (pllives < startinglivesbalance[numgameovers]) // Bump up to 3 lives if the player
 		pllives = startinglivesbalance[numgameovers]; // has less than that.
@@ -88,10 +88,10 @@ static inline void P_ArchivePlayer(void)
 
 	//WRITEUINT8(save_p, skincolor);
 
-	WRITEUINT8(save_p, backsel);
-	WRITEUINT8(save_p, topsel);
-	WRITEUINT8(save_p, colorbacksel);
-	WRITEUINT8(save_p, colortopsel);
+	//WRITEUINT8(save_p, backsel);
+	//WRITEUINT8(save_p, topsel);
+	//WRITEUINT8(save_p, colorbacksel);
+	//WRITEUINT8(save_p, colortopsel);
 }
 
 //
@@ -110,10 +110,10 @@ static inline void P_UnArchivePlayer(void)
 
 	//savedata.skincolor = READUINT8(save_p);
 
-	savedata.backsel = READUINT8(save_p);
-	savedata.topsel = READUINT8(save_p);
-	savedata.colorbacksel = READUINT8(save_p);
-	savedata.colortopsel = READUINT8(save_p);
+	//savedata.backsel = READUINT8(save_p);
+	//savedata.topsel = READUINT8(save_p);
+	//savedata.colorbacksel = READUINT8(save_p);
+	//savedata.colortopsel = READUINT8(save_p);
 }
 
 //

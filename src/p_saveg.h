@@ -40,10 +40,10 @@ typedef struct
 
 	//UINT8 skincolor;
 
-	UINT8 backsel;
-	UINT8 topsel;
-	UINT8 colorbacksel;
-	UINT8 colortopsel;
+	//UINT8 backsel;
+	//UINT8 topsel;
+	//UINT8 colorbacksel;
+	//UINT8 colortopsel;
 } savedata_t;
 
 extern savedata_t savedata;
