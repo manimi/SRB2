@@ -117,6 +117,9 @@ extern consvar_t cv_sleep;
 extern consvar_t cv_backnum, cv_colorbacknum;
 extern consvar_t cv_topnum, cv_colortopnum;
 
+extern consvar_t cv_sbacknum, cv_colorsbacknum;
+extern consvar_t cv_stopnum, cv_colorstopnum;
+
 extern char timedemo_name[256];
 extern boolean timedemo_csv;
 extern char timedemo_csv_id[256];

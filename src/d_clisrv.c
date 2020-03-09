@@ -621,6 +621,8 @@ static inline void resynch_write_player(resynch_pak *rsp, const size_t i)
 	rsp->timeshit = players[i].timeshit;
 	rsp->onconveyor = LONG(players[i].onconveyor);
 
+	rsp->dimenu = players[i].dimenu;
+
 	rsp->hasmo = false;
 	//Transfer important mo information if the player has a body.
 	//This lets us resync players even if they are dead.
@@ -768,6 +770,8 @@ static void resynch_read_player(resynch_pak *rsp)
 	players[i].losstime = (tic_t)LONG(rsp->losstime);
 	players[i].timeshit = rsp->timeshit;
 	players[i].onconveyor = LONG(rsp->onconveyor);
+
+	players[i].dimenu = rsp->dimenu;
 
 	//We get a packet for each player in game.
 	if (!playeringame[i])

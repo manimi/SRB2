@@ -69,6 +69,14 @@ static inline void P_ArchivePlayer(void)
 	const player_t *player = &players[consoleplayer];
 	INT16 skininfo = player->skin + (botskin<<5);
 	SINT8 pllives = player->lives;
+
+	UINT8 skincolor = player->skincolor;
+
+	UINT8 backsel = player->backsel;
+	UINT8 topsel = player->topsel;
+	UINT8 colorbacksel = player->colorbacksel;
+	UINT8 colortopsel = player->colortopsel;
+
 	if (pllives < startinglivesbalance[numgameovers]) // Bump up to 3 lives if the player
 		pllives = startinglivesbalance[numgameovers]; // has less than that.
 
@@ -77,6 +85,13 @@ static inline void P_ArchivePlayer(void)
 	WRITESINT8(save_p, pllives);
 	WRITEUINT32(save_p, player->score);
 	WRITEINT32(save_p, player->continues);
+
+	WRITEUINT8(save_p, skincolor);
+
+	WRITEUINT8(save_p, backsel);
+	WRITEUINT8(save_p, topsel);
+	WRITEUINT8(save_p, colorbacksel);
+	WRITEUINT8(save_p, colortopsel);
 }
 
 //
@@ -92,6 +107,13 @@ static inline void P_UnArchivePlayer(void)
 	savedata.lives = READSINT8(save_p);
 	savedata.score = READUINT32(save_p);
 	savedata.continues = READINT32(save_p);
+
+	savedata.skincolor = READUINT8(save_p);
+
+	savedata.backsel = READUINT8(save_p);
+	savedata.topsel = READUINT8(save_p);
+	savedata.colorbacksel = READUINT8(save_p);
+	savedata.colortopsel = READUINT8(save_p);
 }
 
 //
@@ -300,6 +322,16 @@ static void P_NetArchivePlayers(void)
 		WRITEFIXED(save_p, players[i].height);
 		WRITEFIXED(save_p, players[i].spinheight);
 		WRITEUINT8(save_p, players[i].dimenu);
+
+		WRITEUINT8(save_p, players[i].forward);
+		WRITEUINT8(save_p, players[i].backward);
+		WRITEUINT8(save_p, players[i].left);
+		WRITEUINT8(save_p, players[i].right);
+
+		WRITEUINT8(save_p, players[i].backsel);
+		WRITEUINT8(save_p, players[i].topsel);
+		WRITEUINT8(save_p, players[i].colorbacksel);
+		WRITEUINT8(save_p, players[i].colortopsel);
 	}
 }
 
@@ -494,9 +526,21 @@ static void P_NetUnArchivePlayers(void)
 		players[i].jumpfactor = READFIXED(save_p);
 		players[i].height = READFIXED(save_p);
 		players[i].spinheight = READFIXED(save_p);
+
 		players[i].dimenu = READUINT8(save_p);
 
+		players[i].forward = READUINT8(save_p);
+		players[i].backward = READUINT8(save_p);
+		players[i].left = READUINT8(save_p);
+		players[i].right = READUINT8(save_p);
+
+		players[i].backsel = READUINT8(save_p);
+		players[i].topsel = READUINT8(save_p);
+		players[i].colorbacksel = READUINT8(save_p);
+		players[i].colortopsel = READUINT8(save_p);
+
 		players[i].viewheight = 41*players[i].height/48; // scale cannot be factored in at this point
+
 	}
 }
 

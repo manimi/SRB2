@@ -397,6 +397,7 @@ typedef struct
 	UINT8 numgameovers;
 	INT32 lives;
 	INT32 continues;
+	UINT8 skincolor;
 	INT32 gamemap;
 } saveinfo_t;
 
