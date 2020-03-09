@@ -1417,6 +1417,11 @@ static void SV_SendPlayerInfo(INT32 node)
 		}
 
 		netbuffer->u.playerinfo[i].score = LONG(players[i].score);
+		netbuffer->u.playerinfo[i].forward = (UINT8)(players[i].forward);
+		netbuffer->u.playerinfo[i].backward = (UINT8)(players[i].backward);
+		netbuffer->u.playerinfo[i].left = (UINT8)(players[i].left);
+		netbuffer->u.playerinfo[i].right = (UINT8)(players[i].right);
+		netbuffer->u.playerinfo[i].jumphold = (UINT8)(players[i].jumphold);
 		netbuffer->u.playerinfo[i].backnum = (UINT8)(players[i].backsel);
 		netbuffer->u.playerinfo[i].topnum = (UINT8)(players[i].topsel);
 		netbuffer->u.playerinfo[i].colorbacknum = (UINT8)(players[i].colorbacksel);
@@ -1473,6 +1478,11 @@ static boolean SV_SendServerConfig(INT32 node)
 	// which is nice and easy for us to detect
 	memset(netbuffer->u.servercfg.playerskins, 0xFF, sizeof(netbuffer->u.servercfg.playerskins));
 	memset(netbuffer->u.servercfg.playercolor, 0xFF, sizeof(netbuffer->u.servercfg.playercolor));
+	memset(netbuffer->u.servercfg.forward, 0xFF, sizeof(netbuffer->u.servercfg.forward));
+	memset(netbuffer->u.servercfg.backward, 0xFF, sizeof(netbuffer->u.servercfg.backward));
+	memset(netbuffer->u.servercfg.left, 0xFF, sizeof(netbuffer->u.servercfg.left));
+	memset(netbuffer->u.servercfg.right, 0xFF, sizeof(netbuffer->u.servercfg.right));
+	memset(netbuffer->u.servercfg.jumphold, 0xFF, sizeof(netbuffer->u.servercfg.jumphold));
 	memset(netbuffer->u.servercfg.backnum, 0xFF, sizeof(netbuffer->u.servercfg.backnum));
 	memset(netbuffer->u.servercfg.topnum, 0xFF, sizeof(netbuffer->u.servercfg.topnum));
 	memset(netbuffer->u.servercfg.colorbacknum, 0xFF, sizeof(netbuffer->u.servercfg.colorbacknum));
@@ -1490,6 +1500,11 @@ static boolean SV_SendServerConfig(INT32 node)
 			continue;
 		netbuffer->u.servercfg.playerskins[i] = (UINT8)players[i].skin;
 		netbuffer->u.servercfg.playercolor[i] = (UINT8)players[i].skincolor;
+		netbuffer->u.servercfg.forward[i] = (UINT8)players[i].forward;
+		netbuffer->u.servercfg.backward[i] = (UINT8)players[i].backward;
+		netbuffer->u.servercfg.left[i] = (UINT8)players[i].left;
+		netbuffer->u.servercfg.right[i] = (UINT8)players[i].right;
+		netbuffer->u.servercfg.jumphold[i] = (UINT8)players[i].jumphold;
 		netbuffer->u.servercfg.backnum[i] = (UINT8)players[i].backsel;
 		netbuffer->u.servercfg.topnum[i] = (UINT8)players[i].topsel;
 		netbuffer->u.servercfg.colorbacknum[i] = (UINT8)players[i].colorbacksel;
@@ -3906,6 +3921,11 @@ static void HandlePacketFromAwayNode(SINT8 node)
 			{
 				if (netbuffer->u.servercfg.playerskins[j] == 0xFF
 				 && netbuffer->u.servercfg.playercolor[j] == 0xFF
+				 && netbuffer->u.servercfg.forward[j] == 0xFF
+				 && netbuffer->u.servercfg.backward[j] == 0xFF
+				 && netbuffer->u.servercfg.left[j] == 0xFF
+				 && netbuffer->u.servercfg.right[j] == 0xFF
+				 && netbuffer->u.servercfg.jumphold[j] == 0xFF
 				 && netbuffer->u.servercfg.backnum[j] == 0xFF
 				 && netbuffer->u.servercfg.topnum[j] == 0xFF
 				 && netbuffer->u.servercfg.colorbacknum[j] == 0xFF
@@ -3919,6 +3939,11 @@ static void HandlePacketFromAwayNode(SINT8 node)
 				players[j].equipmentavail = (INT32)SHORT(netbuffer->u.servercfg.playerequipmentavail[j]);
 				SetPlayerSkinByNum(j, (INT32)netbuffer->u.servercfg.playerskins[j]);
 				players[j].skincolor = netbuffer->u.servercfg.playercolor[j];
+				players[j].forward = netbuffer->u.servercfg.forward[j];
+				players[j].backward = netbuffer->u.servercfg.backward[j];
+				players[j].left = netbuffer->u.servercfg.left[j];
+				players[j].right = netbuffer->u.servercfg.right[j];
+				players[j].jumphold = netbuffer->u.servercfg.jumphold[j];
 				players[j].backsel = netbuffer->u.servercfg.backnum[j];
 				players[j].topsel = netbuffer->u.servercfg.topnum[j];
 				players[j].colorbacksel = netbuffer->u.servercfg.colorbacknum[j];

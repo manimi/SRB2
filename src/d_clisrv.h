@@ -298,8 +298,6 @@ typedef struct
 	fixed_t destscale;
 	fixed_t scalespeed;
 
-	//UINT8 dimenu;
-
 	UINT8 forward;
 	UINT8 backward;
 	UINT8 left;
@@ -323,6 +321,11 @@ typedef struct
 	// 0xFF == not in game; else player skin num
 	UINT8 playerskins[MAXPLAYERS];
 	UINT8 playercolor[MAXPLAYERS];
+	UINT8 forward[MAXPLAYERS];
+	UINT8 backward[MAXPLAYERS];
+	UINT8 left[MAXPLAYERS];
+	UINT8 right[MAXPLAYERS];
+	UINT8 jumphold[MAXPLAYERS];
 	UINT8 backnum[MAXPLAYERS];
 	UINT8 topnum[MAXPLAYERS];
 	UINT8 colorbacknum[MAXPLAYERS];
@@ -422,6 +425,11 @@ typedef struct
 	UINT8 address[4]; // sending another string would run us up against MAXPACKETLENGTH
 	UINT8 team;
 	UINT8 skin;
+	UINT8 forward;
+	UINT8 backward;
+	UINT8 left;
+	UINT8 right;
+	UINT8 jumphold;
 	UINT8 backnum;
 	UINT8 topnum;
 	UINT8 colorbacknum;
