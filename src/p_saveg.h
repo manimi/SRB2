@@ -37,13 +37,6 @@ typedef struct
 	INT32 continues;
 	UINT16 emeralds;
 	UINT8 numgameovers;
-
-	//UINT8 skincolor;
-
-	//UINT8 backsel;
-	//UINT8 topsel;
-	//UINT8 colorbacksel;
-	//UINT8 colortopsel;
 } savedata_t;
 
 extern savedata_t savedata;
