@@ -3244,7 +3244,7 @@ static void P_DoClimbing(player_t *player)
 						|| ((player->mo->eflags & MFE_VERTICALFLIP) && (topheight > player->mo->z)
 							&& (bottomheight <= player->mo->z + player->mo->height - FixedMul(16*FRACUNIT, player->mo->scale))))
 						{
-							if (cmd->forwardmove != 0)
+							if (!(player->pflags & PF_STASIS) && cmd->forwardmove != 0)
 								player->mo->momz += rover->master->frontsector->floorspeed;
 							else
 							{
@@ -3479,7 +3479,7 @@ static void P_DoClimbing(player_t *player)
 
 				if (glidesector->sector->floorspeed)
 				{
-					if (cmd->forwardmove != 0)
+					if (!(player->pflags & PF_STASIS) && cmd->forwardmove != 0)
 						player->mo->momz += glidesector->sector->floorspeed;
 					else
 					{
@@ -3496,7 +3496,7 @@ static void P_DoClimbing(player_t *player)
 
 				if (glidesector->sector->ceilspeed)
 				{
-					if (cmd->forwardmove != 0)
+					if (!(player->pflags & PF_STASIS) && cmd->forwardmove != 0)
 						player->mo->momz += glidesector->sector->ceilspeed;
 					else
 					{
@@ -3538,7 +3538,7 @@ static void P_DoClimbing(player_t *player)
 					dy = scroller->dy;
 				}
 
-				if (cmd->forwardmove != 0)
+				if (!(player->pflags & PF_STASIS) && cmd->forwardmove != 0)
 				{
 					player->mo->momz += dy;
 					climb = true;
@@ -3564,7 +3564,7 @@ static void P_DoClimbing(player_t *player)
 			}
 		}
 
-		if (cmd->sidemove != 0 || cmd->forwardmove != 0)
+		if (!(player->pflags & PF_STASIS) && (cmd->sidemove != 0 || cmd->forwardmove != 0))
 			climb = true;
 		else
 			climb = false;
@@ -3580,7 +3580,7 @@ static void P_DoClimbing(player_t *player)
 			if (boostup)
 			{
 				P_SetObjectMomZ(player->mo, 2*FRACUNIT, true);
-				if (cmd->forwardmove)
+				if (!(player->pflags & PF_STASIS) && cmd->forwardmove)
 					player->mo->momz = 2*player->mo->momz/3;
 			}
 			if (thrust)
@@ -3599,7 +3599,7 @@ static void P_DoClimbing(player_t *player)
 		}
 	}
 
-	if (cmd->sidemove != 0 || cmd->forwardmove != 0)
+	if (!(player->pflags & PF_STASIS) && (cmd->sidemove != 0 || cmd->forwardmove != 0))
 		climb = true;
 	else
 		climb = false;
@@ -5677,7 +5677,7 @@ INT32 P_GetPlayerControlDirection(player_t *player)
 	else
 		thiscam = &camera;
 
-	if (!cmd->forwardmove && !cmd->sidemove)
+	if (!(player->pflags & PF_STASIS) && (!cmd->forwardmove && !cmd->sidemove))
 		return 0;
 
 	if (!player->mo->momx && !player->mo->momy)
@@ -5746,7 +5746,7 @@ static void P_2dMovement(player_t *player)
 
 	if (player->exiting || player->pflags & PF_STASIS)
 	{
-		cmd->forwardmove = cmd->sidemove = 0;
+		//cmd->forwardmove = cmd->sidemove = 0;
 		if (player->pflags & PF_GLIDING)
 		{
 			if (!player->skidtime)
@@ -5877,7 +5877,7 @@ static void P_2dMovement(player_t *player)
 //////////////////////////////////////
 	if (player->climbing)
 	{
-		if (cmd->forwardmove != 0)
+		if (!(player->pflags & PF_STASIS) && cmd->forwardmove != 0)
 			P_SetObjectMomZ(player->mo, FixedDiv(cmd->forwardmove*FRACUNIT, 15*FRACUNIT>>1), false);
 
 		player->mo->momx = 0;
@@ -5937,7 +5937,7 @@ static void P_3dMovement(player_t *player)
 
 	if (player->exiting || player->pflags & PF_STASIS)
 	{
-		cmd->forwardmove = cmd->sidemove = 0;
+		//cmd->forwardmove = cmd->sidemove = 0;
 		if (player->pflags & PF_GLIDING)
 		{
 			if (!player->skidtime)
@@ -6096,7 +6096,7 @@ static void P_3dMovement(player_t *player)
 	// Forward movement
 	if (player->climbing)
 	{
-		if (cmd->forwardmove)
+		if (!(player->pflags & PF_STASIS) && cmd->forwardmove != 0)
 		{
 			if (player->mo->eflags & MFE_UNDERWATER)
 				P_SetObjectMomZ(player->mo, FixedDiv(cmd->forwardmove*FRACUNIT, 10*FRACUNIT), false);
@@ -6105,7 +6105,7 @@ static void P_3dMovement(player_t *player)
 		}
 	}
 	else if (!(controlstyle == CS_LMAOGALOG)
-		&& cmd->forwardmove != 0 && !(player->pflags & PF_GLIDING || player->exiting
+		&&  (!(player->pflags & PF_STASIS)) && !(player->pflags & PF_GLIDING || player->exiting
 		|| (P_PlayerInPain(player) && !onground)))
 	{
 		movepushforward = cmd->forwardmove * (thrustfactor * acceleration);
@@ -6304,14 +6304,14 @@ static void P_SpectatorMovement(player_t *player)
 	player->aiming = cmd->aiming<<FRACBITS;
 
 	player->mo->momx = player->mo->momy = player->mo->momz = 0;
-	if (cmd->forwardmove != 0)
+	if (!(player->pflags & PF_STASIS) && cmd->forwardmove != 0)
 	{
 		P_Thrust(player->mo, player->mo->angle, cmd->forwardmove*(FRACUNIT/2));
 
 		// Quake-style flying spectators :D
 		player->mo->momz += FixedMul(cmd->forwardmove*(FRACUNIT/2), AIMINGTOSLOPE(player->aiming));
 	}
-	if (cmd->sidemove != 0)
+	if (!(player->pflags & PF_STASIS) && cmd->sidemove != 0)
 		P_Thrust(player->mo, player->mo->angle-ANGLE_90, cmd->sidemove*(FRACUNIT/2));
 }
 
@@ -7412,7 +7412,7 @@ static void P_NiGHTSMovement(player_t *player)
 			player->drillmeter++; // I'll be nice and give them one.
 	}
 
-	if (cmd->forwardmove != 0)
+	if (!(player->pflags & PF_STASIS) && cmd->forwardmove != 0)
 		moved = true;
 
 	if (!player->bumpertime)
@@ -8198,7 +8198,7 @@ static void P_MovePlayer(player_t *player)
 	// MOVEMENT ANIMATIONS //
 	/////////////////////////
 
-	if ((cmd->forwardmove != 0 || cmd->sidemove != 0) || (player->powers[pw_super] && !onground))
+	if ((!(player->pflags & PF_STASIS) && (cmd->forwardmove != 0 || cmd->sidemove != 0)) || (player->powers[pw_super] && !onground))
 	{
 		// If the player is in dashmode, here's their peelout.
 		if (player->charflags & SF_DASHMODE && player->dashmode >= DASHMODE_THRESHOLD && player->panim == PA_RUN && !player->skidtime && (onground || ((player->charability == CA_FLOAT || player->charability == CA_SLOWFALL) && player->secondjump == 1) || player->powers[pw_super]))
@@ -8390,7 +8390,7 @@ static void P_MovePlayer(player_t *player)
 	else if (player->climbing) // 'Deceleration' for climbing on walls.
 	{
 
-		if (!player->cmd.forwardmove)
+		if (!(player->pflags & PF_STASIS) && !player->cmd.forwardmove)
 			player->mo->momz = 0;
 	}
 	else if (player->pflags & PF_BOUNCING)
@@ -8583,7 +8583,7 @@ static void P_MovePlayer(player_t *player)
 
 	// This really looks like it should be moved to P_3dMovement. -Red
 	if (P_ControlStyle(player) == CS_LMAOGALOG
-		&& (cmd->forwardmove != 0 || cmd->sidemove != 0) && !player->climbing && !twodlevel && !(player->mo->flags2 & MF2_TWOD))
+		&& (!(player->pflags & PF_STASIS) && (cmd->forwardmove != 0 || cmd->sidemove != 0)) && !player->climbing && !twodlevel && !(player->mo->flags2 & MF2_TWOD))
 	{
 		// If travelling slow enough, face the way the controls
 		// point and not your direction of movement.
@@ -12109,7 +12109,7 @@ void P_PlayerThink(player_t *player)
 				diff = (player->mo->angle - player->drawangle);
 				factor = 4;
 			}
-			else if (cmd->forwardmove || cmd->sidemove) // only when you're pressing movement keys
+			else if (!(player->pflags & PF_STASIS) && (cmd->forwardmove || cmd->sidemove)) // only when you're pressing movement keys
 			{
 				diff = ((player->mo->angle + ((player->pflags & PF_ANALOGMODE) ? 0 : R_PointToAngle2(0, 0, cmd->forwardmove<<FRACBITS, -cmd->sidemove<<FRACBITS))) - player->drawangle);
 				factor = 4;
