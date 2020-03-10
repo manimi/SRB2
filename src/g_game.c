@@ -1334,18 +1334,18 @@ void G_BuildTiccmd(ticcmd_t *cmd, INT32 realtics, UINT8 ssplayer)
 			&& (PLAYERINPUTDOWN(ssplayer, gc_lookup) || (gamepadjoystickmove && lookjoystickvector.yaxis > 0))))
 	{
 		forward = forwardmove[speed];
-		player->forward = true;
+		player->forward = 1;
 	} else {
-		player->forward = false;
+		player->forward = 0;
 	}
 	if (movebkey || (gamepadjoystickmove && movejoystickvector.yaxis > 0)
 		|| ((player->powers[pw_carry] == CR_NIGHTSMODE)
 			&& (PLAYERINPUTDOWN(ssplayer, gc_lookdown) || (gamepadjoystickmove && lookjoystickvector.yaxis < 0))))
 	{
 		forward -= forwardmove[speed];
-		player->backward = true;
+		player->backward = 1;
 	} else {
-		player->backward = false;
+		player->backward = 0;
 	}
 
 	if (analogjoystickmove && movejoystickvector.yaxis != 0)
@@ -1356,16 +1356,16 @@ void G_BuildTiccmd(ticcmd_t *cmd, INT32 realtics, UINT8 ssplayer)
 	if (straferkey)
 	{
 		side += sidemove[speed];
-		player->right = true;
+		player->right = 1;
 	} else {
-		player->right = false;
+		player->right = 0;
 	}
 	if (strafelkey)
 	{
 		side -= sidemove[speed];
-		player->left = true;
+		player->left = 1;
 	} else {
-		player->left = false;
+		player->left = 0;
 	}
 
 	if (PLAYERINPUTDOWN(ssplayer, gc_weaponnext))
@@ -1529,9 +1529,9 @@ void G_BuildTiccmd(ticcmd_t *cmd, INT32 realtics, UINT8 ssplayer)
 	if (PLAYERINPUTDOWN(ssplayer, gc_jump) || (usejoystick && axis > 0))
 	{
 		cmd->buttons |= BT_JUMP;
-		player->jumphold = true;
+		player->jumphold = 1;
 	} else {
-		player->jumphold = false;
+		player->jumphold = 0;
 	}
 
 	// player aiming shit, ahhhh...
@@ -2461,11 +2461,11 @@ void G_PlayerReborn(INT32 player, boolean betweenmaps)
 	INT16 rings;
 	INT16 spheres;
 	//boolean dimenu;
-	boolean forward;
-	boolean backward;
-	boolean left;
-	boolean right;
-	boolean jumphold;
+	UINT8 forward;
+	UINT8 backward;
+	UINT8 left;
+	UINT8 right;
+	UINT8 jumphold;
 	UINT8 backsel;
 	UINT8 topsel;
 	UINT8 colorbacksel;

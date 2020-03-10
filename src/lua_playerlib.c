@@ -373,15 +373,15 @@ static int player_get(lua_State *L)
 	//else if (fastcmp(field,"dimenu"))
 		//lua_pushboolean(L, plr->dimenu);
 	else if (fastcmp(field,"forward"))
-		lua_pushboolean(L, plr->forward);
+		lua_pushinteger(L, plr->forward);
 	else if (fastcmp(field,"backward"))
-		lua_pushboolean(L, plr->backward);
+		lua_pushinteger(L, plr->backward);
 	else if (fastcmp(field,"left"))
-		lua_pushboolean(L, plr->left);
+		lua_pushinteger(L, plr->left);
 	else if (fastcmp(field,"right"))
-		lua_pushboolean(L, plr->right);
+		lua_pushinteger(L, plr->right);
 	else if (fastcmp(field,"jumphold"))
-		lua_pushboolean(L, plr->jumphold);
+		lua_pushinteger(L, plr->jumphold);
 	else if (fastcmp(field,"outofcoop"))
 		lua_pushboolean(L, plr->outofcoop);
 	else if (fastcmp(field,"bot"))
@@ -757,15 +757,15 @@ static int player_set(lua_State *L)
 	//else if (fastcmp(field,"dimenu"))
 		//plr->dimenu = lua_toboolean(L, 3);
 	else if (fastcmp(field,"forward"))
-		plr->forward = lua_toboolean(L, 3);
+		plr->forward = luaL_checkinteger(L, 3);
 	else if (fastcmp(field,"backward"))
-		plr->backward = lua_toboolean(L, 3);
+		plr->backward = luaL_checkinteger(L, 3);
 	else if (fastcmp(field,"left"))
-		plr->left = lua_toboolean(L, 3);
+		plr->left = luaL_checkinteger(L, 3);
 	else if (fastcmp(field,"right"))
-		plr->right = lua_toboolean(L, 3);
+		plr->right = luaL_checkinteger(L, 3);
 	else if (fastcmp(field,"jumphold"))
-		plr->jumphold = lua_toboolean(L, 3);
+		plr->jumphold = luaL_checkinteger(L, 3);
 	else {
 		lua_getfield(L, LUA_REGISTRYINDEX, LREG_EXTVARS);
 		I_Assert(lua_istable(L, -1));

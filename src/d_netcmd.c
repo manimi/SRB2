@@ -408,19 +408,19 @@ consvar_t cv_colortopnum = {"colortopnum", "8", CV_CALL|CV_NOINIT|CV_SAVE, color
 //static CV_PossibleValue_t colorstopnum_cons_t[] = {{1, "MIN"}, {MAXSKINCOLORS, "MAX"}, {0, NULL}};
 //consvar_t cv_colorstopnum = {"colorstopnum", "8", CV_CALL|CV_NOINIT, colorstopnum_cons_t, NULL, 0, NULL, NULL, 0, 0, NULL};
 
-static CV_PossibleValue_t forward_cons_t[] = {{0, "MIN"}, {20, "MAX"}, {0, NULL}};
+static CV_PossibleValue_t forward_cons_t[] = {{0, "MIN"}, {1, "MAX"}, {0, NULL}};
 consvar_t cv_forward = {"forward", "0", CV_CALL|CV_NOINIT, forward_cons_t, DiMenuInput_OnChange, 0, NULL, NULL, 0, 0, NULL};
 
-static CV_PossibleValue_t backward_cons_t[] = {{0, "MIN"}, {20, "MAX"}, {0, NULL}};
+static CV_PossibleValue_t backward_cons_t[] = {{0, "MIN"}, {1, "MAX"}, {0, NULL}};
 consvar_t cv_backward = {"backward", "0", CV_CALL|CV_NOINIT, backward_cons_t, DiMenuInput_OnChange, 0, NULL, NULL, 0, 0, NULL};
 
-static CV_PossibleValue_t left_cons_t[] = {{0, "MIN"}, {20, "MAX"}, {0, NULL}};
+static CV_PossibleValue_t left_cons_t[] = {{0, "MIN"}, {1, "MAX"}, {0, NULL}};
 consvar_t cv_left = {"left", "0", CV_CALL|CV_NOINIT, left_cons_t, DiMenuInput_OnChange, 0, NULL, NULL, 0, 0, NULL};
 
-static CV_PossibleValue_t right_cons_t[] = {{0, "MIN"}, {20, "MAX"}, {0, NULL}};
+static CV_PossibleValue_t right_cons_t[] = {{0, "MIN"}, {1, "MAX"}, {0, NULL}};
 consvar_t cv_right = {"right", "0", CV_CALL|CV_NOINIT, right_cons_t, DiMenuInput_OnChange, 0, NULL, NULL, 0, 0, NULL};
 
-static CV_PossibleValue_t jumphold_cons_t[] = {{0, "MIN"}, {20, "MAX"}, {0, NULL}};
+static CV_PossibleValue_t jumphold_cons_t[] = {{0, "MIN"}, {1, "MAX"}, {0, NULL}};
 consvar_t cv_jumphold = {"jumphold", "0", CV_CALL|CV_NOINIT, jumphold_cons_t, DiMenuInput_OnChange, 0, NULL, NULL, 0, 0, NULL};
 
 char timedemo_name[256];

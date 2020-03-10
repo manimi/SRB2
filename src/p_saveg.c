@@ -506,11 +506,11 @@ static void P_NetUnArchivePlayers(void)
 		players[i].height = READFIXED(save_p);
 		players[i].spinheight = READFIXED(save_p);
 
-		players[i].forward = (boolean)READUINT8(save_p);
-		players[i].backward = (boolean)READUINT8(save_p);
-		players[i].left = (boolean)READUINT8(save_p);
-		players[i].right = (boolean)READUINT8(save_p);
-		players[i].jumphold = (boolean)READUINT8(save_p);
+		players[i].forward = READUINT8(save_p);
+		players[i].backward = READUINT8(save_p);
+		players[i].left = READUINT8(save_p);
+		players[i].right = READUINT8(save_p);
+		players[i].jumphold = READUINT8(save_p);
 
 		players[i].backsel = READUINT8(save_p);
 		players[i].topsel = READUINT8(save_p);

@@ -621,11 +621,11 @@ static inline void resynch_write_player(resynch_pak *rsp, const size_t i)
 	rsp->timeshit = players[i].timeshit;
 	rsp->onconveyor = LONG(players[i].onconveyor);
 
-	rsp->forward = players[i].forward;
-	rsp->backward = players[i].backward;
-	rsp->left = players[i].left;
-	rsp->right = players[i].right;
-	rsp->jumphold = players[i].jumphold;
+	rsp->forward = (UINT8)players[i].forward;
+	rsp->backward = (UINT8)players[i].backward;
+	rsp->left = (UINT8)players[i].left;
+	rsp->right = (UINT8)players[i].right;
+	rsp->jumphold = (UINT8)players[i].jumphold;
 
 	rsp->hasmo = false;
 	//Transfer important mo information if the player has a body.
@@ -777,11 +777,11 @@ static void resynch_read_player(resynch_pak *rsp)
 
 	//players[i].dimenu = rsp->dimenu;
 
-	players[i].forward = rsp->forward;
-	players[i].backward = rsp->backward;
-	players[i].left = rsp->left;
-	players[i].right = rsp->right;
-	players[i].jumphold = rsp->jumphold;
+	players[i].forward = (UINT8)rsp->forward;
+	players[i].backward = (UINT8)rsp->backward;
+	players[i].left = (UINT8)rsp->left;
+	players[i].right = (UINT8)rsp->right;
+	players[i].jumphold = (UINT8)rsp->jumphold;
 
 	//We get a packet for each player in game.
 	if (!playeringame[i])
