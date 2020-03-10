@@ -4956,15 +4956,19 @@ static void DiMenuInput_OnChange(void)
 	if (!Playing())
 		return; // do whatever you want
 
-	// DI MENU INPUT change menu scrolling fix is no longer necessary
-	SendDiMenuInput();
-	//{
-	//	CV_StealthSetValue(&cv_forward, players[consoleplayer].forward);
-	//	CV_StealthSetValue(&cv_backward, players[consoleplayer].backward);
-	//	CV_StealthSetValue(&cv_left, players[consoleplayer].left);
-	//	CV_StealthSetValue(&cv_right, players[consoleplayer].right);
-	//	CV_StealthSetValue(&cv_jumphold, players[consoleplayer].jumphold);
-	//}
+	if (!P_PlayerMoving(consoleplayer))
+	{
+		// Di Menu Input change menu scrolling fix is no longer necessary
+		SendDiMenuInput();
+	}
+	else
+	{
+		CV_StealthSetValue(&cv_forward, players[consoleplayer].forward);
+		CV_StealthSetValue(&cv_backward, players[consoleplayer].backward);
+		CV_StealthSetValue(&cv_left, players[consoleplayer].left);
+		CV_StealthSetValue(&cv_right, players[consoleplayer].right);
+		CV_StealthSetValue(&cv_jumphold, players[consoleplayer].jumphold);
+	}
 }
 
 /** Displays the result of the chat being muted or unmuted.
