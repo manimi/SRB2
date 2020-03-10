@@ -10761,6 +10761,21 @@ static inline int lib_getenum(lua_State *L)
     }  else if (fastcmp(word, "colortopnum")) {
 		lua_pushinteger(L, cv_colortopnum.value);
 		return 1;
+	}  else if (fastcmp(word, "forward")) {
+		lua_pushinteger(L, cv_forward.value);
+		return 1;
+	}  else if (fastcmp(word, "backward")) {
+		lua_pushinteger(L, cv_backward.value);
+		return 1;
+	}  else if (fastcmp(word, "left")) {
+		lua_pushinteger(L, cv_left.value);
+		return 1;
+	}  else if (fastcmp(word, "right")) {
+		lua_pushinteger(L, cv_right.value);
+		return 1;
+	}  else if (fastcmp(word, "jumphold")) {
+		lua_pushinteger(L, cv_jumphold.value);
+		return 1;
     }  else if (!mathlib && fastncmp("sfx_",word,4)) {
 		p = word+4;
 		for (i = 0; i < NUMSFX; i++)
