@@ -972,14 +972,28 @@ static void ST_drawLivesArea(void)
 	// shorten the name if its more than twelve characters.
 	strlcpy(name, player_names[stplyr-players], 13);
 
-	if (strlen(name) <= 5)
-		V_DrawRightAlignedString(hudinfo[HUD_LIVES].x+58, hudinfo[HUD_LIVES].y, v_colmap, name);
-	else if (V_StringWidth(name, v_colmap) <= 48)
-		V_DrawString(hudinfo[HUD_LIVES].x+18, hudinfo[HUD_LIVES].y, v_colmap, name);
-	else if (V_ThinStringWidth(name, v_colmap) <= 40)
-		V_DrawRightAlignedThinString(hudinfo[HUD_LIVES].x+58, hudinfo[HUD_LIVES].y, v_colmap, name);
+	if (stplyr->skin == 5) //Player is Metal Sonic.
+	{
+		if (strlen("Metal") <= 5)
+			V_DrawRightAlignedString(hudinfo[HUD_LIVES].x+58, hudinfo[HUD_LIVES].y, v_colmap, "Metal");
+		else if (V_StringWidth("Metal", v_colmap) <= 48)
+			V_DrawString(hudinfo[HUD_LIVES].x+18, hudinfo[HUD_LIVES].y, v_colmap, "Metal");
+		else if (V_ThinStringWidth("Metal", v_colmap) <= 40)
+			V_DrawRightAlignedThinString(hudinfo[HUD_LIVES].x+58, hudinfo[HUD_LIVES].y, v_colmap, "Metal");
+		else
+			V_DrawThinString(hudinfo[HUD_LIVES].x+18, hudinfo[HUD_LIVES].y, v_colmap, "Metal");
+	}
 	else
-		V_DrawThinString(hudinfo[HUD_LIVES].x+18, hudinfo[HUD_LIVES].y, v_colmap, name);
+	{
+		if (strlen(name) <= 5)
+			V_DrawRightAlignedString(hudinfo[HUD_LIVES].x+58, hudinfo[HUD_LIVES].y, v_colmap, name);
+		else if (V_StringWidth(name, v_colmap) <= 48)
+			V_DrawString(hudinfo[HUD_LIVES].x+18, hudinfo[HUD_LIVES].y, v_colmap, name);
+		else if (V_ThinStringWidth(name, v_colmap) <= 40)
+			V_DrawRightAlignedThinString(hudinfo[HUD_LIVES].x+58, hudinfo[HUD_LIVES].y, v_colmap, name);
+		else
+			V_DrawThinString(hudinfo[HUD_LIVES].x+18, hudinfo[HUD_LIVES].y, v_colmap, name);
+	}
 
 	// Power Stones collected
 	if (G_RingSlingerGametype()
