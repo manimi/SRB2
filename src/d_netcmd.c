@@ -60,7 +60,6 @@
 
 static void Got_NameAndColor(UINT8 **cp, INT32 playernum);
 static void Got_Equipment(UINT8 **cp, INT32 playernum);
-static void Got_DiMenuInput(UINT8 **cp, INT32 playernum);
 static void Got_WeaponPref(UINT8 **cp, INT32 playernum);
 static void Got_Mapcmd(UINT8 **cp, INT32 playernum);
 static void Got_ExitLevelcmd(UINT8 **cp, INT32 playernum);
@@ -408,21 +407,6 @@ consvar_t cv_colortopnum = {"colortopnum", "8", CV_CALL|CV_NOINIT|CV_SAVE, color
 //static CV_PossibleValue_t colorstopnum_cons_t[] = {{1, "MIN"}, {MAXSKINCOLORS, "MAX"}, {0, NULL}};
 //consvar_t cv_colorstopnum = {"colorstopnum", "8", CV_CALL|CV_NOINIT, colorstopnum_cons_t, NULL, 0, NULL, NULL, 0, 0, NULL};
 
-static CV_PossibleValue_t forward_cons_t[] = {{0, "MIN"}, {1, "MAX"}, {0, NULL}};
-consvar_t cv_forward = {"forward", "0", CV_CALL|CV_NOINIT, forward_cons_t, DiMenuInput_OnChange, 0, NULL, NULL, 0, 0, NULL};
-
-static CV_PossibleValue_t backward_cons_t[] = {{0, "MIN"}, {1, "MAX"}, {0, NULL}};
-consvar_t cv_backward = {"backward", "0", CV_CALL|CV_NOINIT, backward_cons_t, DiMenuInput_OnChange, 0, NULL, NULL, 0, 0, NULL};
-
-static CV_PossibleValue_t left_cons_t[] = {{0, "MIN"}, {1, "MAX"}, {0, NULL}};
-consvar_t cv_left = {"left", "0", CV_CALL|CV_NOINIT, left_cons_t, DiMenuInput_OnChange, 0, NULL, NULL, 0, 0, NULL};
-
-static CV_PossibleValue_t right_cons_t[] = {{0, "MIN"}, {1, "MAX"}, {0, NULL}};
-consvar_t cv_right = {"right", "0", CV_CALL|CV_NOINIT, right_cons_t, DiMenuInput_OnChange, 0, NULL, NULL, 0, 0, NULL};
-
-static CV_PossibleValue_t jumphold_cons_t[] = {{0, "MIN"}, {1, "MAX"}, {0, NULL}};
-consvar_t cv_jumphold = {"jumphold", "0", CV_CALL|CV_NOINIT, jumphold_cons_t, DiMenuInput_OnChange, 0, NULL, NULL, 0, 0, NULL};
-
 char timedemo_name[256];
 boolean timedemo_csv;
 char timedemo_csv_id[256];
@@ -463,8 +447,7 @@ const char *netxcmdnames[MAXNETXCMD - 1] =
 	"LUACMD",
 	"LUAVAR",
 #endif
-	"EQUIPMENT",
-	"DIMENUINPUT"
+	"EQUIPMENT"
 };
 
 // =========================================================================
@@ -490,7 +473,6 @@ void D_RegisterServerCommands(void)
 
 	RegisterNetXCmd(XD_NAMEANDCOLOR, Got_NameAndColor);
 	RegisterNetXCmd(XD_EQUIPMENT, Got_Equipment);
-	RegisterNetXCmd(XD_DIMENUINPUT, Got_DiMenuInput);
 	RegisterNetXCmd(XD_WEAPONPREF, Got_WeaponPref);
 	RegisterNetXCmd(XD_MAP, Got_Mapcmd);
 	RegisterNetXCmd(XD_EXITLEVEL, Got_ExitLevelcmd);
@@ -740,17 +722,6 @@ void D_RegisterClientCommands(void)
 	CV_RegisterVar(&cv_topnum);
 	CV_RegisterVar(&cv_colorbacknum);
 	CV_RegisterVar(&cv_colortopnum);
-
-	//CV_RegisterVar(&cv_sbacknum);
-	//CV_RegisterVar(&cv_stopnum);
-	//CV_RegisterVar(&cv_colorsbacknum);
-	//CV_RegisterVar(&cv_colorstopnum);
-
-	CV_RegisterVar(&cv_forward);
-	CV_RegisterVar(&cv_backward);
-	CV_RegisterVar(&cv_left);
-	CV_RegisterVar(&cv_right);
-	CV_RegisterVar(&cv_jumphold);
 
 	CV_RegisterVar(&cv_skin); // r_things.c (skin NAME)
 	// secondary player (splitscreen)
@@ -1071,7 +1042,7 @@ boolean EnsurePlayerNameIsGood(char *name, INT32 playernum)
   * \param newname   New name for that player; should already be in
   *                  ::cv_playername or ::cv_playername2 if player is the
   *                  console or secondary display player, respectively.
-  * \sa cv_playername, cv_playername2, SendNameAndColor, SendNameAndColor2, SendEquipment, SendDiMenuInput
+  * \sa cv_playername, cv_playername2, SendNameAndColor, SendNameAndColor2, SendEquipment
   *     SetPlayerName
   * \author Graue <graue@oceanbase.org>
   */
@@ -1575,97 +1546,6 @@ static void SendEquipment(void)
 	SendNetXCmd(XD_EQUIPMENT, buf, p - buf);
 }
 
-// di menu input has changed
-//
-static void SendDiMenuInput(void)
-{
-	char buf[MAXPLAYERNAME+6];
-	char *p;
-
-	p = buf;
-
-	if (!cv_forward.value)
-	{
-		if (players[consoleplayer].forward)
-			CV_StealthSetValue(&cv_forward, players[consoleplayer].forward);
-		else
-			CV_StealthSet(&cv_forward, cv_forward.defaultvalue);
-	}
-
-	if (!cv_backward.value)
-	{
-		if (players[consoleplayer].backward)
-			CV_StealthSetValue(&cv_backward, players[consoleplayer].backward);
-		else
-			CV_StealthSet(&cv_backward, cv_backward.defaultvalue);
-	}
-
-	if (!cv_left.value)
-	{
-		if (players[consoleplayer].left)
-			CV_StealthSetValue(&cv_left, players[consoleplayer].left);
-		else
-			CV_StealthSet(&cv_left, cv_left.defaultvalue);
-	}
-
-	if (!cv_right.value)
-	{
-		if (players[consoleplayer].right)
-			CV_StealthSetValue(&cv_right, players[consoleplayer].right);
-		else
-			CV_StealthSet(&cv_right, cv_right.defaultvalue);
-	}
-
-	if (!cv_jumphold.value)
-	{
-		if (players[consoleplayer].jumphold)
-			CV_StealthSetValue(&cv_jumphold, players[consoleplayer].jumphold);
-		else
-			CV_StealthSet(&cv_jumphold, cv_jumphold.defaultvalue);
-	}
-
-	if (cv_forward.value == players[consoleplayer].forward)
-		return;
-
-	if (cv_backward.value == players[consoleplayer].backward)
-		return;
-
-	if (cv_left.value == players[consoleplayer].left)
-		return;
-
-	if (cv_right.value == players[consoleplayer].right)
-		return;
-
-	if (cv_jumphold.value == players[consoleplayer].jumphold)
-		return;
-
-	// We'll handle it later if we're not playing.
-	if (!Playing())
-		return;
-
-	// If you're not in a netgame, merely update the skin, color, and name.
-	if (!netgame)
-	{
-		players[consoleplayer].forward = cv_forward.value;
-		players[consoleplayer].backward = cv_backward.value;
-		players[consoleplayer].left = cv_left.value;
-		players[consoleplayer].right = cv_right.value;
-		players[consoleplayer].jumphold = cv_jumphold.value;
-
-		return;
-	}
-
-	snacpending++;
-
-	// Finally write out the complete packet and send it off.
-	WRITEUINT8(p, (UINT8)cv_forward.value);
-	WRITEUINT8(p, (UINT8)cv_backward.value);
-	WRITEUINT8(p, (UINT8)cv_left.value);
-	WRITEUINT8(p, (UINT8)cv_right.value);
-	WRITEUINT8(p, (UINT8)cv_jumphold.value);
-	SendNetXCmd(XD_DIMENUINPUT, buf, p - buf);
-}
-
 static void Got_NameAndColor(UINT8 **cp, INT32 playernum)
 {
 	player_t *p = &players[playernum];
@@ -1812,69 +1692,6 @@ static void Got_Equipment(UINT8 **cp, INT32 playernum)
 	}
 }
 
-static void Got_DiMenuInput(UINT8 **cp, INT32 playernum)
-{
-	player_t *p = &players[playernum];
-	UINT8 forward, backward, left, right, jumphold;
-
-#ifdef PARANOIA
-	if (playernum < 0 || playernum > MAXPLAYERS)
-		I_Error("There is no player %d!", playernum);
-#endif
-
-	if (playernum == consoleplayer)
-		snacpending--;
-	else if (playernum == secondarydisplayplayer)
-		snac2pending--;
-
-#ifdef PARANOIA
-	if (snacpending < 0 || snac2pending < 0)
-		I_Error("snacpending negative!");
-#endif
-
-	forward = READUINT8(*cp);
-	backward = READUINT8(*cp);
-	left = READUINT8(*cp);
-	right = READUINT8(*cp);
-	jumphold = READUINT8(*cp);
-
-	// set
-	p->forward = forward;
-	p->backward = backward;
-	p->left = left;
-	p->right = right;
-	p->jumphold = jumphold;
-	
-	// normal player colors
-	if (server && (p != &players[consoleplayer] && p != &players[secondarydisplayplayer]))
-	{
-		boolean kick = false;
-
-		// don't allow nothing
-		if (!p->forward)
-			kick = true;
-	
-		if (!p->backward)
-			kick = true;
-
-		if (!p->left)
-			kick = true;
-
-		if (!p->right)
-			kick = true;
-
-		if (!p->jumphold)
-			kick = true;
-
-		if (kick)
-		{
-			CONS_Alert(CONS_WARNING, M_GetText("Illegal DI Menu Input change has been received.\n"));
-			SendKick(playernum, KICK_MSG_CON_FAIL | KICK_MSG_KEEP_BODY);
-			return;
-		}
-	}
-}
-
 void SendWeaponPref(void)
 {
 	UINT8 buf[1];
@@ -1927,7 +1744,6 @@ void D_SendPlayerConfig(void)
 	SendNameAndColor();
 	if (splitscreen || botingame)
 		SendNameAndColor2();
-	SendDiMenuInput();
 	SendEquipment();
 	SendWeaponPref();
 	if (splitscreen)
@@ -4948,26 +4764,6 @@ static void Equipment_OnChange(void)
 		CV_StealthSetValue(&cv_topnum, players[consoleplayer].topsel);
 		CV_StealthSetValue(&cv_colorbacknum, players[consoleplayer].colorbacksel);
 		CV_StealthSetValue(&cv_colortopnum, players[consoleplayer].colortopsel);
-	}
-}
-
-static void DiMenuInput_OnChange(void)
-{
-	if (!Playing())
-		return; // do whatever you want
-
-	if (!P_PlayerMoving(consoleplayer))
-	{
-		// Di Menu Input change menu scrolling fix is no longer necessary
-		SendDiMenuInput();
-	}
-	else
-	{
-		CV_StealthSetValue(&cv_forward, players[consoleplayer].forward);
-		CV_StealthSetValue(&cv_backward, players[consoleplayer].backward);
-		CV_StealthSetValue(&cv_left, players[consoleplayer].left);
-		CV_StealthSetValue(&cv_right, players[consoleplayer].right);
-		CV_StealthSetValue(&cv_jumphold, players[consoleplayer].jumphold);
 	}
 }
 

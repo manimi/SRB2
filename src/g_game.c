@@ -1332,21 +1332,12 @@ void G_BuildTiccmd(ticcmd_t *cmd, INT32 realtics, UINT8 ssplayer)
 	if (movefkey || (gamepadjoystickmove && movejoystickvector.yaxis < 0)
 		|| ((player->powers[pw_carry] == CR_NIGHTSMODE)
 			&& (PLAYERINPUTDOWN(ssplayer, gc_lookup) || (gamepadjoystickmove && lookjoystickvector.yaxis > 0))))
-	{
 		forward = forwardmove[speed];
-		player->forward = 1;
-	} else {
-		player->forward = 0;
-	}
+
 	if (movebkey || (gamepadjoystickmove && movejoystickvector.yaxis > 0)
 		|| ((player->powers[pw_carry] == CR_NIGHTSMODE)
 			&& (PLAYERINPUTDOWN(ssplayer, gc_lookdown) || (gamepadjoystickmove && lookjoystickvector.yaxis < 0))))
-	{
 		forward -= forwardmove[speed];
-		player->backward = 1;
-	} else {
-		player->backward = 0;
-	}
 
 	if (analogjoystickmove && movejoystickvector.yaxis != 0)
 		forward -= ((movejoystickvector.yaxis * forwardmove[1]) >> 10); // ANALOG!
@@ -1354,19 +1345,10 @@ void G_BuildTiccmd(ticcmd_t *cmd, INT32 realtics, UINT8 ssplayer)
 	// some people strafe left & right with mouse buttons
 	// those people are weird
 	if (straferkey)
-	{
 		side += sidemove[speed];
-		player->right = 1;
-	} else {
-		player->right = 0;
-	}
+		
 	if (strafelkey)
-	{
 		side -= sidemove[speed];
-		player->left = 1;
-	} else {
-		player->left = 0;
-	}
 
 	if (PLAYERINPUTDOWN(ssplayer, gc_weaponnext))
 		cmd->buttons |= BT_WEAPONNEXT; // Next Weapon
@@ -1527,12 +1509,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, INT32 realtics, UINT8 ssplayer)
 	// jump button
 	axis = PlayerJoyAxis(ssplayer, AXISJUMP);
 	if (PLAYERINPUTDOWN(ssplayer, gc_jump) || (usejoystick && axis > 0))
-	{
 		cmd->buttons |= BT_JUMP;
-		player->jumphold = 1;
-	} else {
-		player->jumphold = 0;
-	}
 
 	// player aiming shit, ahhhh...
 	{
@@ -2460,12 +2437,6 @@ void G_PlayerReborn(INT32 player, boolean betweenmaps)
 	SINT8 pity;
 	INT16 rings;
 	INT16 spheres;
-	//boolean dimenu;
-	UINT8 forward;
-	UINT8 backward;
-	UINT8 left;
-	UINT8 right;
-	UINT8 jumphold;
 	UINT8 backsel;
 	UINT8 topsel;
 	UINT8 colorbacksel;
@@ -2479,12 +2450,6 @@ void G_PlayerReborn(INT32 player, boolean betweenmaps)
 	jointime = players[player].jointime;
 	quittime = players[player].quittime;
 	spectator = players[player].spectator;
-	//dimenu = players[player].dimenu;
-	forward = players[player].forward;
-	backward = players[player].backward;
-	left = players[player].left;
-	right = players[player].right;
-	jumphold = players[player].jumphold;
 	outofcoop = players[player].outofcoop;
 	pflags = (players[player].pflags & (PF_FLIPCAM|PF_ANALOGMODE|PF_DIRECTIONCHAR|PF_AUTOBRAKE|PF_TAGIT|PF_GAMETYPEOVER));
 
@@ -2565,12 +2530,6 @@ void G_PlayerReborn(INT32 player, boolean betweenmaps)
 	p->quittime = quittime;
 	p->spectator = spectator;
 	p->outofcoop = outofcoop;
-	//p->dimenu = dimenu;
-	p->forward = forward;
-	p->backward = backward;
-	p->left = left;
-	p->right = right;
-	p->jumphold = jumphold;
 
 	// save player config truth reborn
 	p->skincolor = skincolor;

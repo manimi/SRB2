@@ -3551,7 +3551,7 @@ static void P_DoClimbing(player_t *player)
 
 				sideangle = R_PointToAngle2(lines[player->lastlinehit].v2->x,lines[player->lastlinehit].v2->y,lines[player->lastlinehit].v1->x,lines[player->lastlinehit].v1->y);
 
-				if (cmd->sidemove != 0)
+				if (!(player->pflags & PF_STASIS) && cmd->sidemove != 0)
 				{
 					P_Thrust(player->mo, sideangle, dx);
 					climb = true;
@@ -5685,7 +5685,7 @@ INT32 P_GetPlayerControlDirection(player_t *player)
 
 	if (twodlevel || player->mo->flags2 & MF2_TWOD)
 	{
-		if (!cmd->sidemove)
+		if (!(player->pflags & PF_STASIS) && !cmd->sidemove)
 			return 0;
 		if (!player->mo->momx)
 			return 0;
@@ -5797,11 +5797,11 @@ static void P_2dMovement(player_t *player)
 		else if (player->mo->angle < ANGLE_90 && player->mo->angle > 0)
 			player->mo->angle = 0;
 
-		if (cmd->sidemove > 0 && player->mo->angle != 0 && player->mo->angle >= ANGLE_180)
+		if (!(player->pflags & PF_STASIS) && cmd->sidemove > 0 && player->mo->angle != 0 && player->mo->angle >= ANGLE_180)
 			player->mo->angle += 1280<<FRACBITS;
-		else if (cmd->sidemove < 0 && player->mo->angle != ANGLE_180 && (player->mo->angle > ANGLE_180 || player->mo->angle == 0))
+		else if (!(player->pflags & PF_STASIS) && cmd->sidemove < 0 && player->mo->angle != ANGLE_180 && (player->mo->angle > ANGLE_180 || player->mo->angle == 0))
 			player->mo->angle -= 1280<<FRACBITS;
-		else if (cmd->sidemove == 0)
+		else if (!(player->pflags & PF_STASIS) && cmd->sidemove == 0)
 		{
 			if (player->mo->angle >= ANGLE_270)
 				player->mo->angle += 1280<<FRACBITS;
@@ -5809,7 +5809,7 @@ static void P_2dMovement(player_t *player)
 				player->mo->angle -= 1280<<FRACBITS;
 		}
 	}
-	else if (cmd->sidemove && !(player->climbing) && !P_PlayerInPain(player))
+	else if (!(player->pflags & PF_STASIS) && cmd->sidemove && !(player->climbing) && !P_PlayerInPain(player))
 	{
 		if (cmd->sidemove > 0)
 			player->mo->angle = 0;
@@ -5882,7 +5882,7 @@ static void P_2dMovement(player_t *player)
 
 		player->mo->momx = 0;
 	}
-	else if (cmd->sidemove != 0 && !(player->pflags & PF_GLIDING || player->exiting
+	else if (!(player->pflags & PF_STASIS) && cmd->sidemove != 0 && !(player->pflags & PF_GLIDING || player->exiting
 		|| (P_PlayerInPain(player) && !onground)))
 	{
 		movepushforward = abs(cmd->sidemove) * (thrustfactor * acceleration);
@@ -6137,7 +6137,7 @@ static void P_3dMovement(player_t *player)
 	// Sideways movement
 	if (player->climbing)
 	{
-		if (player->mo->eflags & MFE_UNDERWATER)
+		if (player->mo->eflags & MFE_UNDERWATER && !(player->pflags & PF_STASIS))
 			P_InstaThrust(player->mo, player->mo->angle-ANGLE_90, FixedDiv(cmd->sidemove*player->mo->scale, 10*FRACUNIT));
 		else
 			P_InstaThrust(player->mo, player->mo->angle-ANGLE_90, FixedDiv(cmd->sidemove*player->mo->scale, 15*FRACUNIT>>1));
@@ -6183,7 +6183,7 @@ static void P_3dMovement(player_t *player)
 #endif
 		}
 	}
-	else if (cmd->sidemove && !(player->pflags & PF_GLIDING) && !player->exiting && !P_PlayerInPain(player))
+	else if (!(player->pflags & PF_STASIS) && cmd->sidemove && !(player->pflags & PF_GLIDING) && !player->exiting && !P_PlayerInPain(player))
 	{
 		movepushside = cmd->sidemove * (thrustfactor * acceleration);
 
@@ -7405,7 +7405,7 @@ static void P_NiGHTSMovement(player_t *player)
 	{
 		player->pflags &= ~PF_STARTJUMP;
 
-		if (cmd->sidemove != 0)
+		if (!(player->pflags & PF_STASIS) && cmd->sidemove != 0)
 			moved = true;
 
 		if (player->drillmeter & 1)
@@ -7448,18 +7448,18 @@ static void P_NiGHTSMovement(player_t *player)
 		if (player->speed < 0)
 			player->speed = 0;
 
-		if (!cmd->forwardmove)
+		if (!(player->pflags & PF_STASIS) && !cmd->forwardmove)
 		{
-			if (cmd->sidemove > 0)
+			if (!(player->pflags & PF_STASIS) && cmd->sidemove > 0)
 				newangle = 0;
-			else if (cmd->sidemove < 0)
+			else if (!(player->pflags & PF_STASIS) && cmd->sidemove < 0)
 				newangle = 180;
 		}
-		else if (!cmd->sidemove)
+		else if (!(player->pflags & PF_STASIS) && !cmd->sidemove)
 		{
-			if (cmd->forwardmove > 0)
+			if (!(player->pflags & PF_STASIS) && cmd->forwardmove > 0)
 				newangle = 90;
-			else if (cmd->forwardmove < 0)
+			else if (!(player->pflags & PF_STASIS) && cmd->forwardmove < 0)
 				newangle = 270;
 		}
 		else // AngleFixed(R_PointToAngle2()) results in slight inaccuracy! Don't use it unless movement is on both axises.
@@ -8167,7 +8167,7 @@ static void P_MovePlayer(player_t *player)
 				break; // handled elsewhere
 
 			case CS_SIMPLE:
-				if (cmd->forwardmove || cmd->sidemove)
+				if (!(player->pflags & PF_STASIS) && (cmd->forwardmove || cmd->sidemove))
 				{
 					angle_t controlangle = R_PointToAngle2(0, 0, cmd->forwardmove << FRACBITS, -cmd->sidemove << FRACBITS);
 					player->mo->angle = (cmd->angleturn<<16 /* not FRACBITS */) + controlangle;
@@ -12052,7 +12052,7 @@ void P_PlayerThink(player_t *player)
 					player->drawangle = player->mo->tracer->angle;
 					break;
 				case CR_ROLLOUT:
-					if (cmd->forwardmove || cmd->sidemove) // only when you're pressing movement keys
+					if (!(player->pflags & PF_STASIS) && (cmd->forwardmove || cmd->sidemove)) // only when you're pressing movement keys
 					{ // inverse direction!
 						diff = (((player->cmd.angleturn<<16) + R_PointToAngle2(0, 0, -cmd->forwardmove<<FRACBITS, cmd->sidemove<<FRACBITS)) - player->drawangle);
 						factor = 4;
@@ -12848,7 +12848,7 @@ void P_PlayerAfterThink(player_t *player)
 					break;
 				}
 
-				if (player->cmd.forwardmove || player->cmd.sidemove)
+				if (!(player->pflags & PF_STASIS) && (player->cmd.forwardmove || player->cmd.sidemove))
 				{
 					rock->movedir = (player->cmd.angleturn << FRACBITS) + R_PointToAngle2(0, 0, player->cmd.forwardmove << FRACBITS, -player->cmd.sidemove << FRACBITS);
 					P_Thrust(rock, rock->movedir, rock->scale >> 1);

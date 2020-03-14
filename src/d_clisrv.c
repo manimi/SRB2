@@ -621,12 +621,6 @@ static inline void resynch_write_player(resynch_pak *rsp, const size_t i)
 	rsp->timeshit = players[i].timeshit;
 	rsp->onconveyor = LONG(players[i].onconveyor);
 
-	rsp->forward = (UINT8)players[i].forward;
-	rsp->backward = (UINT8)players[i].backward;
-	rsp->left = (UINT8)players[i].left;
-	rsp->right = (UINT8)players[i].right;
-	rsp->jumphold = (UINT8)players[i].jumphold;
-
 	rsp->hasmo = false;
 	//Transfer important mo information if the player has a body.
 	//This lets us resync players even if they are dead.
@@ -774,14 +768,6 @@ static void resynch_read_player(resynch_pak *rsp)
 	players[i].losstime = (tic_t)LONG(rsp->losstime);
 	players[i].timeshit = rsp->timeshit;
 	players[i].onconveyor = LONG(rsp->onconveyor);
-
-	//players[i].dimenu = rsp->dimenu;
-
-	players[i].forward = (UINT8)rsp->forward;
-	players[i].backward = (UINT8)rsp->backward;
-	players[i].left = (UINT8)rsp->left;
-	players[i].right = (UINT8)rsp->right;
-	players[i].jumphold = (UINT8)rsp->jumphold;
 
 	//We get a packet for each player in game.
 	if (!playeringame[i])
@@ -1417,15 +1403,10 @@ static void SV_SendPlayerInfo(INT32 node)
 		}
 
 		netbuffer->u.playerinfo[i].score = LONG(players[i].score);
-		netbuffer->u.playerinfo[i].forward = (UINT8)(players[i].forward);
-		netbuffer->u.playerinfo[i].backward = (UINT8)(players[i].backward);
-		netbuffer->u.playerinfo[i].left = (UINT8)(players[i].left);
-		netbuffer->u.playerinfo[i].right = (UINT8)(players[i].right);
-		netbuffer->u.playerinfo[i].jumphold = (UINT8)(players[i].jumphold);
-		netbuffer->u.playerinfo[i].backnum = (UINT8)(players[i].backsel);
-		netbuffer->u.playerinfo[i].topnum = (UINT8)(players[i].topsel);
-		netbuffer->u.playerinfo[i].colorbacknum = (UINT8)(players[i].colorbacksel);
-		netbuffer->u.playerinfo[i].colortopnum = (UINT8)(players[i].colortopsel);
+		//netbuffer->u.playerinfo[i].backnum = (UINT8)(players[i].backsel);
+		//netbuffer->u.playerinfo[i].topnum = (UINT8)(players[i].topsel);
+		//netbuffer->u.playerinfo[i].colorbacknum = (UINT8)(players[i].colorbacksel);
+		//netbuffer->u.playerinfo[i].colortopnum = (UINT8)(players[i].colortopsel);
 		netbuffer->u.playerinfo[i].timeinserver = SHORT((UINT16)(players[i].jointime / TICRATE));
 		netbuffer->u.playerinfo[i].skin = (UINT8)(players[i].skin
 #ifdef DEVELOP // it's safe to do this only because PLAYERINFO isn't read by the game itself
@@ -1478,15 +1459,10 @@ static boolean SV_SendServerConfig(INT32 node)
 	// which is nice and easy for us to detect
 	memset(netbuffer->u.servercfg.playerskins, 0xFF, sizeof(netbuffer->u.servercfg.playerskins));
 	memset(netbuffer->u.servercfg.playercolor, 0xFF, sizeof(netbuffer->u.servercfg.playercolor));
-	memset(netbuffer->u.servercfg.forward, 0xFF, sizeof(netbuffer->u.servercfg.forward));
-	memset(netbuffer->u.servercfg.backward, 0xFF, sizeof(netbuffer->u.servercfg.backward));
-	memset(netbuffer->u.servercfg.left, 0xFF, sizeof(netbuffer->u.servercfg.left));
-	memset(netbuffer->u.servercfg.right, 0xFF, sizeof(netbuffer->u.servercfg.right));
-	memset(netbuffer->u.servercfg.jumphold, 0xFF, sizeof(netbuffer->u.servercfg.jumphold));
-	memset(netbuffer->u.servercfg.backnum, 0xFF, sizeof(netbuffer->u.servercfg.backnum));
-	memset(netbuffer->u.servercfg.topnum, 0xFF, sizeof(netbuffer->u.servercfg.topnum));
-	memset(netbuffer->u.servercfg.colorbacknum, 0xFF, sizeof(netbuffer->u.servercfg.colorbacknum));
-	memset(netbuffer->u.servercfg.colortopnum, 0xFF, sizeof(netbuffer->u.servercfg.colortopnum));
+	//memset(netbuffer->u.servercfg.backnum, 0xFF, sizeof(netbuffer->u.servercfg.backnum));
+	//memset(netbuffer->u.servercfg.topnum, 0xFF, sizeof(netbuffer->u.servercfg.topnum));
+	//memset(netbuffer->u.servercfg.colorbacknum, 0xFF, sizeof(netbuffer->u.servercfg.colorbacknum));
+	//memset(netbuffer->u.servercfg.colortopnum, 0xFF, sizeof(netbuffer->u.servercfg.colortopnum));
 	memset(netbuffer->u.servercfg.playeravailabilities, 0xFF, sizeof(netbuffer->u.servercfg.playeravailabilities));
 	memset(netbuffer->u.servercfg.playerequipmentavail, 0xFF, sizeof(netbuffer->u.servercfg.playerequipmentavail));
 
@@ -1500,15 +1476,10 @@ static boolean SV_SendServerConfig(INT32 node)
 			continue;
 		netbuffer->u.servercfg.playerskins[i] = (UINT8)players[i].skin;
 		netbuffer->u.servercfg.playercolor[i] = (UINT8)players[i].skincolor;
-		netbuffer->u.servercfg.forward[i] = (UINT8)players[i].forward;
-		netbuffer->u.servercfg.backward[i] = (UINT8)players[i].backward;
-		netbuffer->u.servercfg.left[i] = (UINT8)players[i].left;
-		netbuffer->u.servercfg.right[i] = (UINT8)players[i].right;
-		netbuffer->u.servercfg.jumphold[i] = (UINT8)players[i].jumphold;
-		netbuffer->u.servercfg.backnum[i] = (UINT8)players[i].backsel;
-		netbuffer->u.servercfg.topnum[i] = (UINT8)players[i].topsel;
-		netbuffer->u.servercfg.colorbacknum[i] = (UINT8)players[i].colorbacksel;
-		netbuffer->u.servercfg.colortopnum[i] = (UINT8)players[i].colortopsel;
+		//netbuffer->u.servercfg.backnum[i] = (UINT8)players[i].backsel;
+		//netbuffer->u.servercfg.topnum[i] = (UINT8)players[i].topsel;
+		//netbuffer->u.servercfg.colorbacknum[i] = (UINT8)players[i].colorbacksel;
+		//netbuffer->u.servercfg.colortopnum[i] = (UINT8)players[i].colortopsel;
 		netbuffer->u.servercfg.playeravailabilities[i] = (UINT32)LONG(players[i].availabilities);
 		netbuffer->u.servercfg.playerequipmentavail[i] = (INT32)SHORT(players[i].equipmentavail);
 	}
@@ -3921,16 +3892,11 @@ static void HandlePacketFromAwayNode(SINT8 node)
 			{
 				if (netbuffer->u.servercfg.playerskins[j] == 0xFF
 				 && netbuffer->u.servercfg.playercolor[j] == 0xFF
-				 && netbuffer->u.servercfg.forward[j] == 0xFF
-				 && netbuffer->u.servercfg.backward[j] == 0xFF
-				 && netbuffer->u.servercfg.left[j] == 0xFF
-				 && netbuffer->u.servercfg.right[j] == 0xFF
-				 && netbuffer->u.servercfg.jumphold[j] == 0xFF
-				 && netbuffer->u.servercfg.backnum[j] == 0xFF
-				 && netbuffer->u.servercfg.topnum[j] == 0xFF
-				 && netbuffer->u.servercfg.colorbacknum[j] == 0xFF
-				 && netbuffer->u.servercfg.colortopnum[j] == 0xFF
 				 && netbuffer->u.servercfg.playeravailabilities[j] == 0xFFFFFFFF)
+				 //&& netbuffer->u.servercfg.backnum[j] == 0xFF
+				 //&& netbuffer->u.servercfg.topnum[j] == 0xFF
+				 //&& netbuffer->u.servercfg.colorbacknum[j] == 0xFF
+				 //&& netbuffer->u.servercfg.colortopnum[j] == 0xFF
 				 //&& netbuffer->u.servercfg.playerequipmentavail[j] == 0xFFFFFFFF)
 					continue; // not in game
 
@@ -3939,15 +3905,10 @@ static void HandlePacketFromAwayNode(SINT8 node)
 				players[j].equipmentavail = (INT32)SHORT(netbuffer->u.servercfg.playerequipmentavail[j]);
 				SetPlayerSkinByNum(j, (INT32)netbuffer->u.servercfg.playerskins[j]);
 				players[j].skincolor = netbuffer->u.servercfg.playercolor[j];
-				players[j].forward = netbuffer->u.servercfg.forward[j];
-				players[j].backward = netbuffer->u.servercfg.backward[j];
-				players[j].left = netbuffer->u.servercfg.left[j];
-				players[j].right = netbuffer->u.servercfg.right[j];
-				players[j].jumphold = netbuffer->u.servercfg.jumphold[j];
-				players[j].backsel = netbuffer->u.servercfg.backnum[j];
-				players[j].topsel = netbuffer->u.servercfg.topnum[j];
-				players[j].colorbacksel = netbuffer->u.servercfg.colorbacknum[j];
-				players[j].colortopsel = netbuffer->u.servercfg.colortopnum[j];
+				//players[j].backsel = netbuffer->u.servercfg.backnum[j];
+				//players[j].topsel = netbuffer->u.servercfg.topnum[j];
+				//players[j].colorbacksel = netbuffer->u.servercfg.colorbacknum[j];
+				//players[j].colortopsel = netbuffer->u.servercfg.colortopnum[j];
 			}
 
 			scp = netbuffer->u.servercfg.varlengthinputs;

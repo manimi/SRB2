@@ -370,18 +370,6 @@ static int player_get(lua_State *L)
 		lua_pushangle(L, plr->awayviewaiming);
 	else if (fastcmp(field,"spectator"))
 		lua_pushboolean(L, plr->spectator);
-	//else if (fastcmp(field,"dimenu"))
-		//lua_pushboolean(L, plr->dimenu);
-	else if (fastcmp(field,"forward"))
-		lua_pushinteger(L, plr->forward);
-	else if (fastcmp(field,"backward"))
-		lua_pushinteger(L, plr->backward);
-	else if (fastcmp(field,"left"))
-		lua_pushinteger(L, plr->left);
-	else if (fastcmp(field,"right"))
-		lua_pushinteger(L, plr->right);
-	else if (fastcmp(field,"jumphold"))
-		lua_pushinteger(L, plr->jumphold);
 	else if (fastcmp(field,"outofcoop"))
 		lua_pushboolean(L, plr->outofcoop);
 	else if (fastcmp(field,"bot"))
@@ -754,18 +742,6 @@ static int player_set(lua_State *L)
 	else if (fastcmp(field,"fovadd"))
 		plr->fovadd = luaL_checkfixed(L, 3);
 #endif
-	//else if (fastcmp(field,"dimenu"))
-		//plr->dimenu = lua_toboolean(L, 3);
-	else if (fastcmp(field,"forward"))
-		plr->forward = luaL_checkinteger(L, 3);
-	else if (fastcmp(field,"backward"))
-		plr->backward = luaL_checkinteger(L, 3);
-	else if (fastcmp(field,"left"))
-		plr->left = luaL_checkinteger(L, 3);
-	else if (fastcmp(field,"right"))
-		plr->right = luaL_checkinteger(L, 3);
-	else if (fastcmp(field,"jumphold"))
-		plr->jumphold = luaL_checkinteger(L, 3);
 	else {
 		lua_getfield(L, LUA_REGISTRYINDEX, LREG_EXTVARS);
 		I_Assert(lua_istable(L, -1));
