@@ -882,6 +882,40 @@ static inline void D_CleanFile(void)
 	}
 }
 
+///\brief Checks if a netgame URL is being handled, and changes working directory to the EXE's if so.
+///       Done because browsers (at least, Firefox on Windows) launch the game from the browser's directory, which causes problems.
+static void ChangeDirForUrlHandler(void)
+{
+	// URL handlers are opened by web browsers (at least Firefox) from the browser's working directory, not the game's stored directory,
+	// so chdir to that directory unless overridden.
+	if (M_GetUrlProtocolArg() != NULL && !M_CheckParm("-nochdir"))
+	{
+		size_t i;
+
+		CONS_Printf("%s connect links load game files from the SRB2 application's stored directory. Switching to ", SERVER_URL_PROTOCOL);
+		strlcpy(srb2path, myargv[0], sizeof(srb2path));
+
+		// Get just the directory, minus the EXE name
+		for (i = strlen(srb2path)-1; i > 0; i--)
+		{
+			if (srb2path[i] == '/' || srb2path[i] == '\\')
+			{
+				srb2path[i] = '\0';
+				break;
+			}
+		}
+
+		CONS_Printf("%s\n", srb2path);
+
+#if defined (_WIN32)
+		SetCurrentDirectoryA(srb2path);
+#else
+		if (chdir(srb2path) == -1)
+			I_OutputMsg("Couldn't change working directory\n");
+#endif
+	}
+}
+
 // ==========================================================================
 // Identify the SRB2 version, and IWAD file to use.
 // ==========================================================================
@@ -1076,6 +1110,9 @@ void D_SRB2Main(void)
 	// Test Dehacked lists
 	DEH_Check();
 
+	// Netgame URL special case: change working dir to EXE folder.
+	ChangeDirForUrlHandler();
+
 	// identify the main IWAD file to use
 	IdentifyVersion();
 
@@ -1158,9 +1195,15 @@ void D_SRB2Main(void)
 	if (M_CheckParm("-password") && M_IsNextParm())
 		D_SetPassword(M_GetNextParm());
 
+	CONS_Printf("Z_Init(): Init zone memory allocation daemon. \n");
+	Z_Init();
+
+	// Do this up here so that WADs loaded through the command line can use ExecCfg
+	COM_Init();
+
 	// add any files specified on the command line with -file wadfile
 	// to the wad list
-	if (!(M_CheckParm("-connect") && !M_CheckParm("-server")))
+	if (!((M_GetUrlProtocolArg() || M_CheckParm("-connect")) && !M_CheckParm("-server")))
 	{
 		if (M_CheckParm("-file"))
 		{
@@ -1185,9 +1228,6 @@ void D_SRB2Main(void)
 	if (M_CheckParm("-server") || dedicated)
 		netgame = server = true;
 
-	CONS_Printf("Z_Init(): Init zone memory allocation daemon. \n");
-	Z_Init();
-
 	// adapt tables to SRB2's needs, including extra slots for dehacked file support
 	P_PatchInfoTables();
 
@@ -1195,7 +1235,7 @@ void D_SRB2Main(void)
 	M_InitMenuPresTables();
 
 	// init title screen display params
-	if (M_CheckParm("-connect"))
+	if (M_GetUrlProtocolArg() || M_CheckParm("-connect"))
 		F_InitMenuPresValues();
 
 	//---------------------------------------------------- READY TIME
@@ -1259,7 +1299,6 @@ void D_SRB2Main(void)
 	CONS_Printf("HU_Init(): Setting up heads up display.\n");
 	HU_Init();
 
-	COM_Init();
 	CON_Init();
 
 	D_RegisterServerCommands();
@@ -1284,13 +1323,19 @@ void D_SRB2Main(void)
 	// Lactozilla: Does the render mode need to change?
 	if ((setrenderneeded != 0) && (setrenderneeded != rendermode))
 	{
-		CONS_Printf("Switching the renderer...\n");
+		CONS_Printf(M_GetText("Switching the renderer...\n"));
+		Z_PreparePatchFlush();
+
+		// set needpatchflush / needpatchrecache true for D_CheckRendererState
 		needpatchflush = true;
 		needpatchrecache = true;
+
+		// Set cv_renderer to the new render mode
 		VID_CheckRenderer();
-		SCR_ChangeRendererCVars(setrenderneeded);
+		SCR_ChangeRendererCVars(rendermode);
+
+		// check the renderer's state
 		D_CheckRendererState();
-		setrenderneeded = 0;
 	}
 
 	wipegamestate = gamestate;

@@ -27,7 +27,7 @@ extern INT32 msg_id;
 #include "g_game.h"
 #include "m_argv.h"
 #include "r_main.h" // R_PointToAngle2() used to calc stereo sep.
-#include "r_things.h" // for skins
+#include "r_skins.h" // for skins
 #include "i_system.h"
 #include "i_sound.h"
 #include "s_sound.h"
@@ -1672,7 +1672,7 @@ void S_LoadMusicDefs(UINT16 wadnum)
 	char *lf;
 	char *stoken;
 
-	size_t nlf;
+	size_t nlf = 0xFFFFFFFF;
 	size_t ncr;
 
 	musicdef_t *def = NULL;
