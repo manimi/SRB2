@@ -4083,7 +4083,6 @@ void F_CutsceneTicker(void)
 
 	// advance animation
 	finalecount++;
-	cutscene_boostspeed = 0;
 
 	dofadenow = false;
 
@@ -4098,6 +4097,10 @@ void F_CutsceneTicker(void)
 			cutscene_boostspeed = 1;
 			if (timetonext)
 				timetonext = 2;
+		}
+		else
+		{
+			cutscene_boostspeed = 0;
 		}
 	}
 
