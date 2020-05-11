@@ -160,9 +160,7 @@ static void Command_Isgamemodified_f(void);
 static void Command_Cheats_f(void);
 #ifdef _DEBUG
 static void Command_Togglemodified_f(void);
-#ifdef HAVE_BLUA
 static void Command_Archivetest_f(void);
-#endif
 #endif
 static void Command_Whitelist_f(void);
 
@@ -443,10 +441,9 @@ const char *netxcmdnames[MAXNETXCMD - 1] =
 	"DELFILE", // replace next time we add an XD
 	"SETMOTD",
 	"SUICIDE",
-#ifdef HAVE_BLUA
 	"LUACMD",
 	"LUAVAR",
-#endif
+	"LUAFILE",
 	"EQUIPMENT"
 };
 
@@ -481,9 +478,8 @@ void D_RegisterServerCommands(void)
 	RegisterNetXCmd(XD_PAUSE, Got_Pause);
 	RegisterNetXCmd(XD_SUICIDE, Got_Suicide);
 	RegisterNetXCmd(XD_RUNSOC, Got_RunSOCcmd);
-#ifdef HAVE_BLUA
 	RegisterNetXCmd(XD_LUACMD, Got_Luacmd);
-#endif
+	RegisterNetXCmd(XD_LUAFILE, Got_LuaFile);
 
 	// Remote Administration
 	COM_AddCommand("password", Command_Changepassword_f);
@@ -533,9 +529,7 @@ void D_RegisterServerCommands(void)
 	COM_AddCommand("whitelist", Command_Whitelist_f);
 #ifdef _DEBUG
 	COM_AddCommand("togglemodified", Command_Togglemodified_f);
-#ifdef HAVE_BLUA
 	COM_AddCommand("archivetest", Command_Archivetest_f);
-#endif
 #endif
 
 	// for master server connection
@@ -610,6 +604,7 @@ void D_RegisterServerCommands(void)
 
 	// d_clisrv
 	CV_RegisterVar(&cv_maxplayers);
+	CV_RegisterVar(&cv_joindelay);
 	CV_RegisterVar(&cv_rejointimeout);
 	CV_RegisterVar(&cv_resynchattempts);
 	CV_RegisterVar(&cv_maxsend);
@@ -950,7 +945,7 @@ void D_RegisterClientCommands(void)
 #ifdef _DEBUG
 	COM_AddCommand("causecfail", Command_CauseCfail_f);
 #endif
-#if defined(HAVE_BLUA) && defined(LUA_ALLOW_BYTECODE)
+#ifdef LUA_ALLOW_BYTECODE
 	COM_AddCommand("dumplua", Command_Dumplua_f);
 #endif
 }
@@ -1296,7 +1291,7 @@ static void SendNameAndColor(void)
 
 		players[consoleplayer].skincolor = cv_playercolor.value;
 
-		if (players[consoleplayer].mo)
+		if (players[consoleplayer].mo && !players[consoleplayer].powers[pw_dye])
 			players[consoleplayer].mo->color = players[consoleplayer].skincolor;
 
 		if (metalrecording)
@@ -1410,8 +1405,9 @@ static void SendNameAndColor2(void)
 	if (botingame)
 	{
 		players[secondplaya].skincolor = botcolor;
-		if (players[secondplaya].mo)
+		if (players[secondplaya].mo && !players[secondplaya].powers[pw_dye])
 			players[secondplaya].mo->color = players[secondplaya].skincolor;
+
 		SetPlayerSkinByNum(secondplaya, botskin-1);
 		return;
 	}
@@ -1424,7 +1420,7 @@ static void SendNameAndColor2(void)
 
 		// don't use secondarydisplayplayer: the second player must be 1
 		players[secondplaya].skincolor = cv_playercolor2.value;
-		if (players[secondplaya].mo)
+		if (players[secondplaya].mo && !players[secondplaya].powers[pw_dye])
 			players[secondplaya].mo->color = players[secondplaya].skincolor;
 
 		if (cv_forceskin.value >= 0 && (netgame || multiplayer)) // Server wants everyone to use the same player
@@ -2205,9 +2201,7 @@ static void Got_Mapcmd(UINT8 **cp, INT32 playernum)
 	UINT8 flags;
 	INT32 resetplayer = 1, lastgametype;
 	UINT8 skipprecutscene, FLS;
-#ifdef HAVE_BLUA
 	INT16 mapnumber;
-#endif
 
 	if (playernum != serverplayer && !IsPlayerAdmin(playernum))
 	{
@@ -2269,10 +2263,8 @@ static void Got_Mapcmd(UINT8 **cp, INT32 playernum)
 		CV_StealthSetValue(&cv_playercolor, players[0].skincolor);
 	}
 
-#ifdef HAVE_BLUA
 	mapnumber = M_MapNumber(mapname[3], mapname[4]);
 	LUAh_MapChange(mapnumber);
-#endif
 
 	G_InitNew(ultimatemode, mapname, resetplayer, skipprecutscene, FLS);
 	if (demoplayback && !timingdemo)
@@ -2856,11 +2848,9 @@ static void Got_Teamchange(UINT8 **cp, INT32 playernum)
 		return;
 	}
 
-#ifdef HAVE_BLUA
 	// Don't switch team, just go away, please, go awaayyyy, aaauuauugghhhghgh
 	if (!LUAh_TeamSwitch(&players[playernum], NetPacket.packet.newteam, players[playernum].spectator, NetPacket.packet.autobalance, NetPacket.packet.scrambled))
 		return;
-#endif
 
 	//no status changes after hidetime
 	if ((gametyperules & GTR_HIDEFROZEN) && (leveltime >= (hidetime * TICRATE)))
@@ -3017,12 +3007,10 @@ static void Got_Teamchange(UINT8 **cp, INT32 playernum)
 	//reset view if you are changed, or viewing someone who was changed.
 	if (playernum == consoleplayer || displayplayer == playernum)
 	{
-#ifdef HAVE_BLUA
 		// Call ViewpointSwitch hooks here.
 		// The viewpoint was forcibly changed.
 		if (displayplayer != consoleplayer) // You're already viewing yourself. No big deal.
-			LUAh_ViewpointSwitch(&players[playernum], &players[displayplayer], true);
-#endif
+			LUAh_ViewpointSwitch(&players[consoleplayer], &players[consoleplayer], true);
 		displayplayer = consoleplayer;
 	}
 
@@ -3520,10 +3508,6 @@ static void Got_RequestAddfilecmd(UINT8 **cp, INT32 playernum)
 	boolean kick = false;
 	boolean toomany = false;
 	INT32 i,j;
-	serverinfo_pak *dummycheck = NULL;
-
-	// Shut the compiler up.
-	(void)dummycheck;
 
 	READSTRINGN(*cp, filename, 240);
 	READMEM(*cp, md5sum, 16);
@@ -3931,11 +3915,11 @@ static void ExitMove_OnChange(void)
 			{
 				if (players[i].mo->target && players[i].mo->target->type == MT_SIGN)
 					P_SetTarget(&players[i].mo->target, NULL);
-				
+
 				if (players[i].pflags & PF_FINISHED)
 					P_GiveFinishFlags(&players[i]);
 			}
-			
+
 		CONS_Printf(M_GetText("Players can now move after completing the level.\n"));
 	}
 	else
@@ -4542,7 +4526,6 @@ static void Command_Togglemodified_f(void)
 	modifiedgame = !modifiedgame;
 }
 
-#ifdef HAVE_BLUA
 extern UINT8 *save_p;
 static void Command_Archivetest_f(void)
 {
@@ -4586,7 +4569,6 @@ static void Command_Archivetest_f(void)
 	Z_Free(buf);
 	CONS_Printf("Done. No crash.\n");
 }
-#endif
 #endif
 
 /** Makes a change to ::cv_forceskin take effect immediately.
