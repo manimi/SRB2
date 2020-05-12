@@ -213,12 +213,7 @@ extern char logfilename[1024];
 // it's only for detection of the version the player is using so the MS can alert them of an update.
 // Only set it higher, not lower, obviously.
 // Note that we use this to help keep internal testing in check; this is why v2.2.0 is not version "1".
-<<<<<<< HEAD
-
-#define MODVERSION 43
-=======
 #define MODVERSION 44
->>>>>>> feced5ec3c469b2842c70e50663373dcd2d0cd2f
 
 // To version config.cfg, MAJOREXECVERSION is set equal to MODVERSION automatically.
 // Increment MINOREXECVERSION whenever a config change is needed that does not correspond
