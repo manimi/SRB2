@@ -131,21 +131,21 @@ extern char logfilename[1024];
 #endif
 
 /* A mod name to further distinguish versions. */
-#define SRB2APPLICATION "SRB2 DI"
+#define SRB2APPLICATION "SRB2"
 
 //#define DEVELOP // Disable this for release builds to remove excessive cheat commands and enable MD5 checking and stuff, all in one go. :3
 #ifdef DEVELOP
 #define VERSION    0 // Game version
 #define SUBVERSION 0 // more precise version number
-#define VERSIONSTRING "Destructive Illusion"
-#define VERSIONSTRINGW L"Destructive Illusion"
+#define VERSIONSTRING "Development EXE"
+#define VERSIONSTRINGW L"Development EXE"
 // most interface strings are ignored in development mode.
 // we use comprevision and compbranch instead.
 #else
 #define VERSION    202 // Game version
 #define SUBVERSION 4  // more precise version number
-#define VERSIONSTRING "v1.0.0"
-#define VERSIONSTRINGW L"v1.0.0"
+#define VERSIONSTRING "v2.2.4"
+#define VERSIONSTRINGW L"v2.2.4"
 // Hey! If you change this, add 1 to the MODVERSION below!
 // Otherwise we can't force updates!
 #endif

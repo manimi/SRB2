@@ -1046,8 +1046,8 @@ static inline void D_Titlebar(void)
 	char title1[82]; // srb2 title banner
 	char title2[82];
 
-	strcpy(title1, "Sonic Robo Blast 2 Destructive Illusion");
-	strcpy(title2, "Sonic Robo Blast 2 Destructive Illusion");
+	strcpy(title1, "Sonic Robo Blast 2");
+	strcpy(title2, "Sonic Robo Blast 2");
 
 	D_MakeTitleString(title1);
 
@@ -1079,7 +1079,7 @@ void D_SRB2Main(void)
 
 	// Print GPL notice for our console users (Linux)
 	CONS_Printf(
-	"\n\nSonic Robo Blast 2 Destructive Illusion\n"
+	"\n\nSonic Robo Blast 2\n"
 	"Copyright (C) 1998-2020 by Sonic Team Junior\n\n"
 	"This program comes with ABSOLUTELY NO WARRANTY.\n\n"
 	"This is free software, and you are welcome to redistribute it\n"
