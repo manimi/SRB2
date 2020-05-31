@@ -126,6 +126,8 @@ boolean advancedemo;
 INT32 debugload = 0;
 #endif
 
+char savegamename[256];
+
 char srb2home[256] = ".";
 char srb2path[256] = ".";
 boolean usehome = true;
